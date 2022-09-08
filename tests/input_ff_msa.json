@@ -1,0 +1,9 @@
+{
+    "input_source": "fasta_file",
+    "input_fasta_file": "/olson@patricbrc.org/PATRIC-QA/DataSets/SubspeciesClassification/query_sequences.fasta",
+    "ref_msa_fasta": "/olson@patricbrc.org/PATRIC-QA/DataSets/SubspeciesClassification/refseq_Dengue_34.aln",
+    "virus_type": "DENGUE",
+    "output_file": "output_singularity_selected",
+    "output_path": "/olson@patricbrc.org/home/test",
+    "xoutput_path": "/mkuscuog@bvbrc/home/subspecies/output"
+}

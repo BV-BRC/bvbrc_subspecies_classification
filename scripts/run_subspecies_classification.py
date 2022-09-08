@@ -6,9 +6,16 @@ import os
 import subprocess
 import sys
 
-ALIGNMENT_PATH = "$KD_TOP/lib/ref-tree-alignment"
-
-FORESTER_PATH = "$KD_TOP/lib/forester.jar"
+#
+# Determine path to our alignments.
+#
+top = os.getenv("KB_TOP")
+tree_deployed = os.path.join(top, "lib", "ref-tree-alignment");
+tree_dev = os.path.join(top, "modules", "bvbrc_subspecies_classification", "lib", "ref-tree-alignment");
+if os.path.exists(tree_deployed):
+  ALIGNMENT_PATH = tree_deployed
+else:
+  ALIGNMENT_PATH = tree_dev
 
 MAFFT_OUTPUT_F_NAME = "ref_MSA_with_query_seqs.fasta"
 PPLACER_OUTPUT_F_NAME = "out.json"
@@ -120,8 +127,7 @@ if __name__ == "__main__" :
     sys.exit(-1)
 
   #Guppy to generate a tree for every query sequence
-  guppy_bin = os.path.join(PPLACER_DIR, "guppy")
-  guppy_cmd = [guppy_bin, "sing", pplacer_output]
+  guppy_cmd = ["guppy", "sing", pplacer_output]
   try:
     subprocess.check_call(guppy_cmd, shell=False)
   except Exception as e:
@@ -131,7 +137,7 @@ if __name__ == "__main__" :
   #Cladinator
   guppy_output = os.path.join(output_dir, GUPPY_OUTPUT_F_NAME)
   cladinator_output = os.path.join(output_dir, CLADINATOR_OUTPUT_F_NAME)
-  cladinator_cmd = ["java", "-Xmx8048m", "-cp", FORESTER_PATH, "org.forester.application.cladinator", guppy_output, output_file]
+  cladinator_cmd = ["cladinator", guppy_output, output_file]
   if "clade_mapping" in job_data:
     mapping_cmd = ["-m=%s" %(job_data["clade_mapping"]), "-S=%s" %(CLADE_DELIMITER)]
     cladinator_cmd.extend(mapping_cmd)
