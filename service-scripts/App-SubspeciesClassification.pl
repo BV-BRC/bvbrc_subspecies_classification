@@ -31,13 +31,13 @@ sub preflight
     my $token = $app->token();
     my $ws = $app->workspace();
 
-    # TODO (ask bob): estimate cpu, memory, and runtime values 
+    # TODO (ask bob): estimate cpu, memory, and runtime values
     # TODO create group of genomes for testing
 }
 
 sub process_subspeciesclass
 {
-    my($app, $app_def, $raw_params, $params) = @_;   
+    my($app, $app_def, $raw_params, $params) = @_;
 
     print 'Proc subspecies classification ', Dumper($app_def, $raw_params, $params);
 
@@ -50,17 +50,17 @@ sub process_subspeciesclass
     # the job output.
     #
     # We also create a staging directory for the input files from the workspace.
-    # 
+    #
 
     # TODO: may not need a staging directory
-    
+
     # my $cwd = getcwd();
-    my $cwd = File::Temp->newdir( CLEANUP => 1 ); 
+    my $cwd = File::Temp->newdir( CLEANUP => 1 );
     my $work_dir = "$cwd/work";
     my $stage_dir = "$cwd/stage";
 
     -d $work_dir or mkdir $work_dir or die "Cannot mkdir $work_dir: $!";
-    -d $stage_dir or mkdir $stage_dir or die "Cannot mkdir $stage_dir: $!";   
+    -d $stage_dir or mkdir $stage_dir or die "Cannot mkdir $stage_dir: $!";
 
     my $data_api = Bio::KBase::AppService::AppConfig->data_api_url;
     my $dat = { data_api => $data_api };
@@ -71,7 +71,7 @@ sub process_subspeciesclass
 
     #
     # Write job description.
-    #  
+    #
     my $jdesc = "$cwd/jobdesc.json";
     open(JDESC, ">", $jdesc) or die "Cannot write $jdesc: $!";
     print JDESC JSON::XS->new->pretty(1)->encode($params_to_app);
@@ -79,7 +79,7 @@ sub process_subspeciesclass
 
     my $parallel = $ENV{P3_ALLOCATED_CPU};
 
-    my @cmd = ("/home/ac.mkuscuog/git/bvbrc_subspecies_classification/scripts/run_subspecies_classification.py","-o",$work_dir,"--jfile", $jdesc);
+    my @cmd = ("run_subspecies_classification","-o",$work_dir,"--jfile", $jdesc);
 
     warn Dumper (\@cmd, $params_to_app);
 
@@ -91,7 +91,7 @@ sub process_subspeciesclass
     }
 
     my @output_suffixes = ([qr/\.tsv$/, 'tsv'],[qr/\.json$/, 'json'],[qr/\.tre$/, 'nwk']);
-    
+
     my $outfile;
     opendir(D, $work_dir) or die "Cannot opendir $work_dir: $!";
     # TODO: not sure what this does?
@@ -108,9 +108,9 @@ sub process_subspeciesclass
                 $output = 0;
                 my $type = $suf->[1];
 
-                $app->workspace->save_file_to_file("$work_dir/$file", {}, "$output_dir/$file", $type, 1, 
+                $app->workspace->save_file_to_file("$work_dir/$file", {}, "$output_dir/$file", $type, 1,
                                                     (-s "$work_dir/$file" > 10_000 ? 1 : 0), #use shock for larger files
-                                                    $token);                                                   
+                                                    $token);
             }
         }
     }
