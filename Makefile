@@ -10,6 +10,10 @@ SRC_PERL = $(wildcard scripts/*.pl)
 BIN_PERL = $(addprefix $(BIN_DIR)/,$(basename $(notdir $(SRC_PERL))))
 DEPLOY_PERL = $(addprefix $(TARGET)/bin/,$(basename $(notdir $(SRC_PERL))))
 
+SRC_PYTHON = $(wildcard scripts/*.py)
+BIN_PYTHON = $(addprefix $(BIN_DIR)/,$(basename $(notdir $(SRC_PYTHON))))
+DEPLOY_PYTHON = $(addprefix $(TARGET)/bin/,$(basename $(notdir $(SRC_PYTHON))))
+
 SRC_SERVICE_PERL = $(wildcard service-scripts/*.pl)
 BIN_SERVICE_PERL = $(addprefix $(BIN_DIR)/,$(basename $(notdir $(SRC_SERVICE_PERL))))
 DEPLOY_SERVICE_PERL = $(addprefix $(SERVICE_DIR)/bin/,$(basename $(notdir $(SRC_SERVICE_PERL))))
@@ -29,7 +33,7 @@ TPAGE_ARGS = --define kb_top=$(TARGET) --define kb_runtime=$(DEPLOY_RUNTIME) --d
 
 all: bin 
 
-bin: $(BIN_PERL) $(BIN_SERVICE_PERL)
+bin: $(BIN_PERL) $(BIN_SERVICE_PERL) $(BIN_PYTHON)
 
 deploy: deploy-all
 deploy-all: deploy-client 
@@ -68,6 +72,9 @@ $(BIN_DIR)/%: service-scripts/%.pl $(TOP_DIR)/user-env.sh
 	$(WRAP_PERL_SCRIPT) '$$KB_TOP/modules/$(CURRENT_DIR)/$<' $@
 
 $(BIN_DIR)/%: service-scripts/%.py $(TOP_DIR)/user-env.sh
+	$(WRAP_PYTHON_SCRIPT) '$$KB_TOP/modules/$(CURRENT_DIR)/$<' $@
+
+$(BIN_DIR)/%: scripts/%.py $(TOP_DIR)/user-env.sh
 	$(WRAP_PYTHON_SCRIPT) '$$KB_TOP/modules/$(CURRENT_DIR)/$<' $@
 
 include $(TOP_DIR)/tools/Makefile.common.rules

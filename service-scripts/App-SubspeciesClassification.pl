@@ -28,11 +28,12 @@ sub preflight
 
     print STDERR "preflight subspeciesclass ", Dumper($params, $app);
 
-    my $token = $app->token();
-    my $ws = $app->workspace();
-
-    # TODO (ask bob): estimate cpu, memory, and runtime values
-    # TODO create group of genomes for testing
+    return {
+	cpu => 2,
+	memory => "16G",
+	runtime => 3600,
+	storage => 0,
+    };
 }
 
 sub process_subspeciesclass
