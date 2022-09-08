@@ -1,0 +1,77 @@
+
+
+IMPORTANT WARNING: Sequences 2 and 7 are exactly identical
+
+
+IMPORTANT WARNING: Sequences 5 and 6 are exactly identical
+
+
+IMPORTANT WARNING: Sequences b and c are exactly identical
+
+IMPORTANT WARNING
+Found 3 sequences that are exactly identical to other sequences in the alignment.
+Normally they should be excluded from the analysis.
+
+Just in case you might need it, an alignment file with 
+sequence duplicates removed is printed to file MurrayValley_2_mafft_1000l_ni_aln.reduced
+
+
+This is RAxML version 7.2.6 released by Alexandros Stamatakis in February 2010.
+
+With greatly appreciated code contributions by:
+Andre Aberer (TUM)
+Simon Berger (TUM)
+John Cazes (TACC)
+Michael Ott (TUM)
+Nick Pattengale (UNM)
+Wayne Pfeiffer (SDSC)
+
+
+Alignment has 629 distinct alignment patterns
+
+Proportion of gaps and completely undetermined characters in this alignment: 4.03%
+
+RAxML rapid hill-climbing mode
+
+Using 1 distinct models/data partitions with joint branch length optimization
+
+
+Executing 1 inferences on the original alignment using 1 distinct randomized MP trees
+
+All free model parameters will be estimated by RAxML
+GAMMA model of rate heteorgeneity, ML estimate of alpha-parameter
+
+GAMMA Model parameters will be estimated up to an accuracy of 0.1000000000 Log Likelihood units
+
+Partition: 0
+Alignment Patterns: 629
+Name: No Name Provided
+DataType: DNA
+Substitution Matrix: GTR
+
+
+
+
+RAxML was called as follows:
+
+/home/lambda/SOFT/RAxML-7.2.6/raxmlHPC -m GTRGAMMA -s MurrayValley_2_mafft_1000l_ni_aln -n MurrayValley_2_mafft_1000l_ni_raxml_GTR 
+
+
+Inference[0]: Time 2.492036 GAMMA-based likelihood -29894.805010, best rearrangement setting 5
+alpha[0]: 0.223130 rates[0] ac ag at cg ct gt: 0.693193 6.140308 0.886040 0.167593 20.778425 1.000000 
+
+
+Conducting final model optimizations on all 1 trees under GAMMA-based models ....
+
+Inference[0] final GAMMA-based Likelihood: -29889.441898 tree written to file /home/lambda/Dropbox/WORK/JCVI/REF_TREES/Flavivirus/trees_for_ppplacer/RAxML_result.MurrayValley_2_mafft_1000l_ni_raxml_GTR
+
+
+Starting final GAMMA-based thorough Optimization on tree 0 likelihood -29889.441898 .... 
+
+Final GAMMA-based Score of best tree -29889.441792
+
+Program execution info written to /home/lambda/Dropbox/WORK/JCVI/REF_TREES/Flavivirus/trees_for_ppplacer/RAxML_info.MurrayValley_2_mafft_1000l_ni_raxml_GTR
+Best-scoring ML tree written to: /home/lambda/Dropbox/WORK/JCVI/REF_TREES/Flavivirus/trees_for_ppplacer/RAxML_bestTree.MurrayValley_2_mafft_1000l_ni_raxml_GTR
+
+Overall execution time: 3.931966 secs or 0.001092 hours or 0.000046 days
+
