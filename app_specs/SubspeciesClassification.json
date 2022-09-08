@@ -1,0 +1,66 @@
+{
+  "id": "SubspeciesClassification",
+  "label": "Subspecies Classification",
+  "script": "App-SubspeciesClassification",
+  "description": "Subspecies Classification",
+  "parameters": [
+    {
+        "id": "input_source",
+        "label": "Source of input (id_list, fasta_data, fasta_file, genome_group)",
+        "required": 1,
+        "type": "enum",
+        "enum": ["id_list", "fasta_data", "fasta_file", "genome_group"]
+    },
+    {
+      "id": "input_fasta_data",
+      "label": "Input sequence in fasta formats",
+      "required": 0,
+      "default": null,
+      "type": "string"
+    },
+    {
+      "id": "input_fasta_file",
+      "label": "Input sequence as a workspace file of fasta data",
+      "required": 0,
+      "default": null,
+      "type": "wsid"
+    },
+    {
+      "id": "input_genome_group",
+      "label": "Input sequence as a workspace genome group",
+      "required": 0,
+      "default": null,
+      "type": "wsid"
+    },
+    {
+      "id": "ref_msa_fasta",
+      "label": "Reference multiple sequence alignment (Fasta-formatted)",
+      "required": 0,
+      "default": null,
+      "type": "wsid"
+    },
+    {
+      "id": "virus_type",
+      "label": "Virus type",
+      "required": 1,
+      "default": null,
+      "type": "string"
+    },
+    {
+      "id": "output_path",
+      "label": "Output Folder",
+      "required": 1,
+      "default": null,
+      "desc": "Path to which the output will be written. Defaults to the directory containing the input data. ",
+      "type": "folder"
+    },
+    {
+      "id": "output_file",
+      "label": "File Basename",
+      "required": 1,
+      "default": null,
+      "desc": "Basename for the generated output files. Defaults to the basename of the input data.",
+      "type": "wsid"
+    }
+  ]
+}
