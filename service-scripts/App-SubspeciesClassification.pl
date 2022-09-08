@@ -91,7 +91,7 @@ sub process_subspeciesclass
         die "Command failed: @cmd\n";
     }
 
-    my @output_suffixes = ([qr/\.tsv$/, 'tsv'],[qr/\.json$/, 'json'],[qr/\.tre$/, 'nwk']);
+    my @output_suffixes = ([qr/\.tsv$/, 'tsv'],[qr/\.tre$/, 'nwk']);
 
     my $outfile;
     opendir(D, $work_dir) or die "Cannot opendir $work_dir: $!";

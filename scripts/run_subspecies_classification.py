@@ -169,11 +169,14 @@ if __name__ == "__main__" :
           q.write(lines[i])
 
     #Create summary file
-    summary_file = os.path.join(output_dir, "summary.tsv")
-    with open(summary_file, "w") as s:
+    result_file = os.path.join(output_dir, "result.tsv")
+    with open(result_file, "w") as s:
       s.write("Query Identifier\tClade Classification\tLink\tPhylogenetic Tree\n")
       for key, value in query_dict.iteritems():
         s.write(value)
+
+    #Remove initial output file
+    os.remove(output_file)
   except Exception as e:
     print("Error running cladinator:\n %s" %(e))
     sys.exit(-1)
