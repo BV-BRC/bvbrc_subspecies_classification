@@ -24,8 +24,6 @@ CLADINATOR_OUTPUT_F_NAME = "cladinator_results.tsv"
 
 CLADE_DELIMITER = "'.+\{(.+)\}'"
 
-TREE_LINK = "/view/PhylogeneticTree2/?&labelSearch=true&idType=patric_id&labelType=feature_name&wsTreeFile=%s/.%s/%s&fileType=nwk"
-
 if __name__ == "__main__" :
   parser = argparse.ArgumentParser(description="SubSpecies Classification Script")
   parser.add_argument("-j", "--jfile", help="json file for job", required=True)
@@ -153,7 +151,7 @@ if __name__ == "__main__" :
         split = line.split('\t')
         if previous_query != split[0]:
           previous_query = split[0]
-          query_dict[split[0]] = split[0] + "\t" + split[1] + "\t" + split[2] + "\t<a href='{link}'>View</a>\n"
+          query_dict[split[0]] = split[0] + "\t" + split[1] + "\t" + split[2] + "\n"
     
     #Generate tre files for each query
     file_name_syntax = "%s.tre"
@@ -163,7 +161,6 @@ if __name__ == "__main__" :
         for key in query_dict:
           if key in lines[i]:
             file_name = file_name_syntax %(key) 
-            query_dict[key] = query_dict[key].replace("{link}", TREE_LINK %(job_data["output_path"], job_data["output_file"], file_name))
             break
         with open(os.path.join(output_dir, file_name), "w") as q:
           q.write(lines[i])
@@ -171,7 +168,7 @@ if __name__ == "__main__" :
     #Create summary file
     result_file = os.path.join(output_dir, "result.tsv")
     with open(result_file, "w") as s:
-      s.write("Query Identifier\tClade Classification\tLink\tPhylogenetic Tree\n")
+      s.write("Query Identifier\tClade Classification\tLink\n")
       for key, value in query_dict.iteritems():
         s.write(value)
 
