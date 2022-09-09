@@ -146,12 +146,17 @@ if __name__ == "__main__" :
     query_dict = {}
     with open(output_file, "r") as f:
       next(f) 
-      previous_query = ""
       for line in f:
         split = line.split('\t')
-        if previous_query != split[0]:
-          previous_query = split[0]
-          query_dict[split[0]] = split[0] + "\t" + split[1] + "\t" + split[2] + "\n"
+        query = split[0]
+        if split[1] == "Matching Clades":
+          query_dict[query] = split[2]
+        elif split[1] == "Matching Down-tree Bracketing Clades" and query_dict[query] == "?":
+          #Use down-tree classification value if matching clade is ?
+          if split[2] == "?":
+            query_dict[query] = "Sequence cannot be classified based on the reference tree"
+          else:
+            query_dict[query] = split[2] + "-like"
     
     #Generate tre files for each query
     file_name_syntax = "%s.tre"
@@ -162,15 +167,16 @@ if __name__ == "__main__" :
           if key in lines[i]:
             file_name = file_name_syntax %(key) 
             break
-        with open(os.path.join(output_dir, file_name), "w") as q:
-          q.write(lines[i])
+        if "file_name" in dir():
+          with open(os.path.join(output_dir, file_name), "w") as q:
+            q.write(lines[i])
 
     #Create summary file
     result_file = os.path.join(output_dir, "result.tsv")
     with open(result_file, "w") as s:
-      s.write("Query Identifier\tClade Classification\tLink\n")
+      s.write("Query Identifier\tClade Classification\n")
       for key, value in query_dict.iteritems():
-        s.write(value)
+        s.write(key + "\t" + value + "\n")
 
     #Remove initial output file
     os.remove(output_file)
