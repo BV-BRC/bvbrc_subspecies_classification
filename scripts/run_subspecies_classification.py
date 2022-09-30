@@ -16,10 +16,8 @@ tree_deployed = os.path.join(top, "lib", "ref-tree-alignment");
 tree_dev = os.path.join(top, "modules", "bvbrc_subspecies_classification", "lib", "ref-tree-alignment");
 if os.path.exists(tree_deployed):
   ALIGNMENT_PATH = tree_deployed
-  BASE_HREF = "<base href=\"https://www.bv-brc.org/\">" 
 else:
   ALIGNMENT_PATH = tree_dev
-  BASE_HREF = "<base href=\"https://alpha.bv-brc.org/\">"
 
 report_deployed = os.path.join(top, "lib", "classification_report.html");
 report_dev = os.path.join(top, "modules", "bvbrc_subspecies_classification", "lib", "classification_report.html");
@@ -27,6 +25,8 @@ if os.path.exists(tree_deployed):
   REPORT_TEMPLATE_PATH = report_deployed
 else:
   REPORT_TEMPLATE_PATH = report_dev 
+
+BASE_URL = os.environ["P3_BASE_URL"]
 
 MAFFT_OUTPUT_F_NAME = "ref_MSA_with_query_seqs.fasta"
 PPLACER_OUTPUT_F_NAME = "out.json"
@@ -36,7 +36,7 @@ CLADINATOR_OUTPUT_F_NAME = "cladinator_results.tsv"
 CLADE_DELIMITER = "'.+\{(.+)\}'"
 REPORT_DATE = "<span>Report Date:</span> %s"
 TABLE_ROW = "<td class=\"dgrid-cell dgrid-cell-padding\">%{data}</td>"
-TREE_LINK = "<a href=\"/view/PhylogeneticTree2/?wsTreeFile=%s/.%s/details/%s.tre&fileType=nwk&isClassification=1&initialValue=%s\" target=\"_blank\">VIEW TREE</a>"
+TREE_LINK = "<a href=\"%s/view/PhylogeneticTree2/?wsTreeFile=%s/.%s/details/%s.tre&fileType=nwk&isClassification=1&initialValue=%s\" target=\"_blank\">VIEW TREE</a>"
 
 if __name__ == "__main__" :
   parser = argparse.ArgumentParser(description="SubSpecies Classification Script")
@@ -203,10 +203,9 @@ if __name__ == "__main__" :
       rows += TABLE_ROW.replace("%{data}", key)
       rows += TABLE_ROW.replace("%{data}", value + "-like")
       initial_value = value.startswith("Sequence") and "" or value
-      rows += TABLE_ROW.replace("%{data}", TREE_LINK %(job_data["output_path"], job_data["output_file"], key, initial_value))
+      rows += TABLE_ROW.replace("%{data}", TREE_LINK %(BASE_URL, job_data["output_path"], job_data["output_file"], key, initial_value))
       rows += "</tr>"
 
-    html_data[4] = BASE_HREF
     html_data[60] = REPORT_DATE %(datetime.now().strftime("%B %d, %Y %H:%M:%S"))
     html_data[72] = rows
     with open(report_file, 'w') as f:
