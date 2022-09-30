@@ -91,28 +91,32 @@ sub process_subspeciesclass
         die "Command failed: @cmd\n";
     }
 
-    my @output_suffixes = ([qr/\.tsv$/, 'tsv'],[qr/\.tre$/, 'nwk']);
+    my %suffix_map = (tsv => 'tsv',
+                      tre => 'nwk',
+                      html => 'html',
+                      txt => 'txt',
+                      json => 'json');
 
-    my $outfile;
-    opendir(D, $work_dir) or die "Cannot opendir $work_dir: $!";
-    # TODO: not sure what this does?
-    my @files = sort {$a cmp $b } grep { -f "$work_dir/$_" } readdir(D);
+    my @suffix_map = map { ("--map-suffix", "$_=$suffix_map{$_}") } keys %suffix_map;
 
-    my $output = 1;
-    my $output_dir = "$params->{output_path}/.$params->{output_file}";
-    for my $file (@files)
+    if (opendir(my $dh, $work_dir))
     {
-        for my $suf (@output_suffixes)
+        while (my $p = readdir($dh))
         {
-            if ($file =~ $suf->[0])
-            {
-                $output = 0;
-                my $type = $suf->[1];
+            next if $p =~ /^\./;
 
-                $app->workspace->save_file_to_file("$work_dir/$file", {}, "$output_dir/$file", $type, 1,
-                                                    (-s "$work_dir/$file" > 10_000 ? 1 : 0), #use shock for larger files
-                                                    $token);
+            my @cmd = ("p3-cp", "-r", "-f", @suffix_map, "$work_dir/$p", "ws:" . $app->result_folder);
+            print "@cmd\n";
+            my $ok = IPC::Run::run(\@cmd);
+            if (!$ok)
+            {
+                warn "Error $? copying output with @cmd\n";
             }
-        }
+        } 
+        closedir($dh);
+    }
+    else
+    {
+        warn "Output directory $work_dir does not exist\n";
     }
 }
