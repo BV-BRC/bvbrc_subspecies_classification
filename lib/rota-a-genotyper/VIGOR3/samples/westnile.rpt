@@ -1,0 +1,143 @@
+2013-02-27 14:42:55
+
+
+parameters
+	bl2seq_extend_hsp	25
+	bl2seq_extend_span	50
+	candidate_blastopts	-p blastx -M BLOSUM45 -e 1E-5 -g F -b 1000 -v 0 -F "" -z 3000000
+	candidate_evalue	
+	candidate_overlap_threshold	0.8
+	candidate_refdb	
+	command_line	/local/devel/ANNOTATION/VIRAL/VIGOR/new/VIGOR3.pl -i westnile.fasta -o westnile
+	default_gene_optional	0
+	default_gene_required	0
+	default_gene_variation	1
+	frameshift_sensitivity	1
+	gene_variations	
+	jcvi_rules	1
+	mature_pep_mincoverage	50
+	mature_pep_minidentity	25
+	mature_pep_minsimilarity	40
+	mature_pep_refdb	/local/devel/ANNOTATION/VIRAL/VIGOR/data3/virus_mp
+	max_intron_size	7000
+	min_candidate_pctsimilarity	50
+	min_candidate_sbjcoverage	33
+	min_exon_size	3
+	min_intron_size	30
+	min_pseudogene_coverage	80
+	min_pseudogene_identity	50
+	min_pseudogene_similarity	75
+	noncanonical_splicing_genes	
+	optional_genes	
+	reference_db	/local/devel/ANNOTATION/VIRAL/VIGOR/data3/virus_db
+	required_genes	
+	ribosomal_slippage_genes	
+	rna_editing_genes	
+	selectivity	0.985
+	slippage_frameshift	-1
+	slippage_motif	[NT][NT][NT]AAAC
+	spliced_genes	
+	splicesite_extend_range	0
+	tile_overlap	1000000
+	tile_size	10000000
+	use_locus_tags	1
+	variation	0.975
+	verbose	0
+	vigorspace	/local/devel/ANNOTATION/VIRAL/VIGOR/new/vigorscratch/493974.389582039
+
+
+Sequence               Length  Genes  Pseudogenes  CDS Bases  Peptide Bases  %Ref Coverage  %Ref Identity  %Ref Similarity   Ref DB
+gi|399764453|gb|JX41      709      1            0        707            235            6.8           98.7             99.9   yfv_db
+
+gene_id            %id    %sim   %cov   %t5   %gap  %t3   start..stop      pep sz ref sz ref id            definition
+gi|399764453.1     98.7   99.9   6.8    43.8  0.0   49.4  <1..>707         235    3433   CAX41890          GP1 | putative genome polyprotein, fragment
+gi|399764453.1.2   96.6   99.5   37.6   0.0   0.0   62.4  9..>707          233    619    sp|P06935_3       putative non-structural protein NS3, N-terminal
+
+
+Sequence               Length  Genes  Pseudogenes  CDS Bases  Peptide Bases  %Ref Coverage  %Ref Identity  %Ref Similarity   Ref DB
+gi|399764449|gb|JQ92    10714      2            0      13890           4628          100.0           99.6             99.9   yfv_db
+
+gene_id            %id    %sim   %cov   %t5   %gap  %t3   start..stop      pep sz ref sz ref id            definition
+gi|399764449.1     99.5   99.8   100.0  0.0   0.0   0.0   66..3521         1195   1195   CAX41890_GP2      GP2 | truncated polyprotein
+                                                          3521..3652                                       
+gi|399764449.1.4   100.0  100.0  100.0  0.0   0.0   0.0   2439..3521       404    404    399764449_NS1p    non-structural protein NS1'
+                                                          3521..3649                                       
+gi|399764449.2     99.6   99.9   100.0  0.0   0.0   0.0   66..10367        3433   3433   CAX41890          GP1 | genome polyprotein
+gi|399764449.2.1   89.4   98.4   100.0  0.0   0.0   0.0   66..434          123    123    sp|P06935_C       anchored capsid protein C
+gi|399764449.2.2   95.8   99.9   100.0  0.0   0.0   0.0   435..935         167    167    sp|P06935_M       M protein
+gi|399764449.2.3   94.6   97.9   100.0  0.0   0.0   0.0   936..2438        501    497    sp|P06935_E       envelope protein E
+gi|399764449.2.4   91.2   98.4   100.0  0.0   0.0   0.0   2439..3494       352    352    sp|P06935_1       non-structural protein NS1
+gi|399764449.2.5   88.7   98.7   100.0  0.0   0.0   0.0   3495..4187       231    231    sp|P06935_2a      non-structural protein NS2a
+gi|399764449.2.6   97.7   99.8   100.0  0.0   0.0   0.0   4188..4580       131    131    sp|P06935_2b      non-structural protein NS2b
+gi|399764449.2.7   95.6   99.3   100.0  0.0   0.0   0.0   4581..6437       619    619    sp|P06935_3       non-structural protein NS3
+gi|399764449.2.8   92.9   98.0   100.0  0.0   0.0   0.0   6438..6815       126    126    sp|P06935_4a      non-structural protein NS4a
+gi|399764449.2.9   91.3   98.9   100.0  0.0   0.0   0.0   6816..6884       23     23     sp|P06935_2k      2k protein
+gi|399764449.2.10  90.2   97.3   100.0  0.0   0.0   0.0   6885..7649       255    256    sp|P06935_4b      non-structural protein NS4b
+gi|399764449.2.11  94.7   99.0   100.0  0.0   0.0   0.0   7650..10364      905    905    sp|P06935_5       RNA-directed RNA polymerase NS5
+
+
+Sequence               Length  Genes  Pseudogenes  CDS Bases  Peptide Bases  %Ref Coverage  %Ref Identity  %Ref Similarity   Ref DB
+gi|399764451|gb|JQ92    10477      2            0      13890           4628          100.0           99.7             99.9   yfv_db
+
+gene_id            %id    %sim   %cov   %t5   %gap  %t3   start..stop      pep sz ref sz ref id            definition
+gi|399764451.1     99.6   99.8   100.0  0.0   0.0   0.0   79..3534         1195   1195   CAX41890_GP2      GP2 | truncated polyprotein
+                                                          3534..3665                                       
+gi|399764451.1.4   99.5   99.7   100.0  0.0   0.0   0.0   2452..3534       404    404    399764449_NS1p    non-structural protein NS1'
+                                                          3534..3662                                       
+gi|399764451.2     99.7   99.9   100.0  0.0   0.0   0.0   79..10380        3433   3433   CAX41890          GP1 | genome polyprotein
+gi|399764451.2.1   90.2   98.4   100.0  0.0   0.0   0.0   79..447          123    123    sp|P06935_C       anchored capsid protein C
+gi|399764451.2.2   95.8   99.9   100.0  0.0   0.0   0.0   448..948         167    167    sp|P06935_M       M protein
+gi|399764451.2.3   94.6   97.9   100.0  0.0   0.0   0.0   949..2451        501    497    sp|P06935_E       envelope protein E
+gi|399764451.2.4   91.2   98.4   100.0  0.0   0.0   0.0   2452..3507       352    352    sp|P06935_1       non-structural protein NS1
+gi|399764451.2.5   89.2   99.1   100.0  0.0   0.0   0.0   3508..4200       231    231    sp|P06935_2a      non-structural protein NS2a
+gi|399764451.2.6   98.5   100.0  100.0  0.0   0.0   0.0   4201..4593       131    131    sp|P06935_2b      non-structural protein NS2b
+gi|399764451.2.7   95.8   99.3   100.0  0.0   0.0   0.0   4594..6450       619    619    sp|P06935_3       non-structural protein NS3
+gi|399764451.2.8   93.7   98.8   100.0  0.0   0.0   0.0   6451..6828       126    126    sp|P06935_4a      non-structural protein NS4a
+gi|399764451.2.9   91.3   98.9   100.0  0.0   0.0   0.0   6829..6897       23     23     sp|P06935_2k      2k protein
+gi|399764451.2.10  90.2   97.3   100.0  0.0   0.0   0.0   6898..7662       255    256    sp|P06935_4b      non-structural protein NS4b
+gi|399764451.2.11  94.7   99.0   100.0  0.0   0.0   0.0   7663..10377      905    905    sp|P06935_5       RNA-directed RNA polymerase NS5
+
+
+Sequence               Length  Genes  Pseudogenes  CDS Bases  Peptide Bases  %Ref Coverage  %Ref Identity  %Ref Similarity   Ref DB
+gi|397790878|gb|JX07    10845      2            0      13890           4628          100.0           99.2             99.8   yfv_db
+
+gene_id            %id    %sim   %cov   %t5   %gap  %t3   start..stop      pep sz ref sz ref id            definition
+gi|397790878.1     98.8   99.7   100.0  0.0   0.0   0.0   97..3552         1195   1195   CAX41890_GP2      GP2 | truncated polyprotein
+                                                          3552..3683                                       
+gi|397790878.1.4   98.3   99.6   100.0  0.0   0.0   0.0   2470..3552       404    404    399764449_NS1p    non-structural protein NS1'
+                                                          3552..3680                                       
+gi|397790878.2     99.3   99.9   100.0  0.0   0.0   0.0   97..10398        3433   3433   CAX41890          GP1 | genome polyprotein
+gi|397790878.2.1   90.2   98.4   100.0  0.0   0.0   0.0   97..465          123    123    sp|P06935_C       anchored capsid protein C
+gi|397790878.2.2   95.8   99.9   100.0  0.0   0.0   0.0   466..966         167    167    sp|P06935_M       M protein
+gi|397790878.2.3   94.8   97.9   100.0  0.0   0.0   0.0   967..2469        501    497    sp|P06935_E       envelope protein E
+gi|397790878.2.4   90.9   98.4   100.0  0.0   0.0   0.0   2470..3525       352    352    sp|P06935_1       non-structural protein NS1
+gi|397790878.2.5   89.6   99.1   100.0  0.0   0.0   0.0   3526..4218       231    231    sp|P06935_2a      non-structural protein NS2a
+gi|397790878.2.6   97.7   100.0  100.0  0.0   0.0   0.0   4219..4611       131    131    sp|P06935_2b      non-structural protein NS2b
+gi|397790878.2.7   95.8   99.3   100.0  0.0   0.0   0.0   4612..6468       619    619    sp|P06935_3       non-structural protein NS3
+gi|397790878.2.8   93.7   98.8   100.0  0.0   0.0   0.0   6469..6846       126    126    sp|P06935_4a      non-structural protein NS4a
+gi|397790878.2.9   95.7   98.9   100.0  0.0   0.0   0.0   6847..6915       23     23     sp|P06935_2k      2k protein
+gi|397790878.2.10  91.8   97.5   100.0  0.0   0.0   0.0   6916..7680       255    256    sp|P06935_4b      non-structural protein NS4b
+gi|397790878.2.11  94.8   98.9   100.0  0.0   0.0   0.0   7681..10395      905    905    sp|P06935_5       RNA-directed RNA polymerase NS5
+
+
+Sequence               Length  Genes  Pseudogenes  CDS Bases  Peptide Bases  %Ref Coverage  %Ref Identity  %Ref Similarity   Ref DB
+gi|397770647|gb|JX04    10998      2            0      13890           4628          100.0           99.2             99.8   yfv_db
+
+gene_id            %id    %sim   %cov   %t5   %gap  %t3   start..stop      pep sz ref sz ref id            definition
+gi|397770647.1     99.2   99.7   100.0  0.0   0.0   0.0   97..3552         1195   1195   CAX41890_GP2      GP2 | truncated polyprotein
+                                                          3552..3683                                       
+gi|397770647.1.4   98.8   99.4   100.0  0.0   0.0   0.0   2470..3552       404    404    399764449_NS1p    non-structural protein NS1'
+                                                          3552..3680                                       
+gi|397770647.2     99.2   99.8   100.0  0.0   0.0   0.0   97..10398        3433   3433   CAX41890          GP1 | genome polyprotein
+gi|397770647.2.1   90.2   98.4   100.0  0.0   0.0   0.0   97..465          123    123    sp|P06935_C       anchored capsid protein C
+gi|397770647.2.2   95.8   99.9   100.0  0.0   0.0   0.0   466..966         167    167    sp|P06935_M       M protein
+gi|397770647.2.3   94.4   97.9   100.0  0.0   0.0   0.0   967..2469        501    497    sp|P06935_E       envelope protein E
+gi|397770647.2.4   91.5   98.1   100.0  0.0   0.0   0.0   2470..3525       352    352    sp|P06935_1       non-structural protein NS1
+gi|397770647.2.5   89.2   98.7   100.0  0.0   0.0   0.0   3526..4218       231    231    sp|P06935_2a      non-structural protein NS2a
+gi|397770647.2.6   97.7   100.0  100.0  0.0   0.0   0.0   4219..4611       131    131    sp|P06935_2b      non-structural protein NS2b
+gi|397770647.2.7   95.6   99.2   100.0  0.0   0.0   0.0   4612..6468       619    619    sp|P06935_3       non-structural protein NS3
+gi|397770647.2.8   92.1   98.6   100.0  0.0   0.0   0.0   6469..6846       126    126    sp|P06935_4a      non-structural protein NS4a
+gi|397770647.2.9   91.3   98.9   100.0  0.0   0.0   0.0   6847..6915       23     23     sp|P06935_2k      2k protein
+gi|397770647.2.10  90.6   96.9   100.0  0.0   0.0   0.0   6916..7680       255    256    sp|P06935_4b      non-structural protein NS4b
+gi|397770647.2.11  94.3   98.8   100.0  0.0   0.0   0.0   7681..10395      905    905    sp|P06935_5       RNA-directed RNA polymerase NS5
+

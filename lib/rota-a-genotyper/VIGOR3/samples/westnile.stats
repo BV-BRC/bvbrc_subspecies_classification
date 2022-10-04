@@ -1,0 +1,6 @@
+Sequence	Length	Genes	Pseudogenes	CDS Bases	Peptide Bases	%Ref Coverage	%Ref Identity	%Ref Similarity	Ref DB
+gi|399764453|gb|JX417422.1|	709	1	0	707	235	6.8	98.7	99.9	yfv_db
+gi|399764449|gb|JQ928174.1|	10714	2	0	13890	4628	100.0	99.6	99.9	yfv_db
+gi|399764451|gb|JQ928175.1|	10477	2	0	13890	4628	100.0	99.7	99.9	yfv_db
+gi|397790878|gb|JX070655.1|	10845	2	0	13890	4628	100.0	99.2	99.8	yfv_db
+gi|397770647|gb|JX041634.1|	10998	2	0	13890	4628	100.0	99.2	99.8	yfv_db

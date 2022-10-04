@@ -92,6 +92,8 @@ sub process_subspeciesclass
     }
 
     my %suffix_map = (tsv => 'tsv',
+                      result => 'tsv',
+                      err => 'tsv',
                       tre => 'nwk',
                       html => 'html',
                       txt => 'txt',

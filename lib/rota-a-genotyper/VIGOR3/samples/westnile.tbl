@@ -1,0 +1,316 @@
+>Features gi|399764453|gb|JX417422.1|
+<1	>707	gene
+			locus_tag	vigor_GP1
+			gene	GP1
+<1	>707	CDS
+			codon_start	3
+			protein_id	gi|399764453.1
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	putative genome polyprotein, fragment
+
+>Features gi|399764453.1
+3	>235	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	putative non-structural protein NS3, N-terminal
+>Features gi|399764449|gb|JQ928174.1|
+66	3652	gene
+			locus_tag	vigor_GP2
+			gene	GP2
+66	3521	CDS
+3521	3652
+			codon_start	1
+			protein_id	gi|399764449.1
+			locus_tag	vigor_GP2
+			gene	GP2
+			product	truncated polyprotein
+			ribosomal_slippage
+66	10367	gene
+			locus_tag	vigor_GP1
+			gene	GP1
+66	10367	CDS
+			codon_start	1
+			protein_id	gi|399764449.2
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	genome polyprotein
+
+>Features gi|399764449.1
+792	1195	mat_peptide
+			locus_tag	vigor_GP2
+			gene	GP2
+			product	non-structural protein NS1'
+
+>Features gi|399764449.2
+1	123	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	anchored capsid protein C
+124	290	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	M protein
+291	791	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	envelope protein E
+792	1143	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	non-structural protein NS1
+1144	1374	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	non-structural protein NS2a
+1375	1505	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	non-structural protein NS2b
+			note	synonym: serine protease subunit NS2B
+1506	2124	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	non-structural protein NS3
+2125	2250	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	non-structural protein NS4a
+			note	synonym: serine protease NS3
+2251	2273	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	2k protein
+2274	2528	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	non-structural protein NS4b
+2529	3433	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	RNA-directed RNA polymerase NS5
+>Features gi|399764451|gb|JQ928175.1|
+79	3665	gene
+			locus_tag	vigor_GP2
+			gene	GP2
+79	3534	CDS
+3534	3665
+			codon_start	1
+			protein_id	gi|399764451.1
+			locus_tag	vigor_GP2
+			gene	GP2
+			product	truncated polyprotein
+			ribosomal_slippage
+79	10380	gene
+			locus_tag	vigor_GP1
+			gene	GP1
+79	10380	CDS
+			codon_start	1
+			protein_id	gi|399764451.2
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	genome polyprotein
+
+>Features gi|399764451.1
+792	1195	mat_peptide
+			locus_tag	vigor_GP2
+			gene	GP2
+			product	non-structural protein NS1'
+
+>Features gi|399764451.2
+1	123	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	anchored capsid protein C
+124	290	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	M protein
+291	791	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	envelope protein E
+792	1143	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	non-structural protein NS1
+1144	1374	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	non-structural protein NS2a
+1375	1505	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	non-structural protein NS2b
+			note	synonym: serine protease subunit NS2B
+1506	2124	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	non-structural protein NS3
+2125	2250	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	non-structural protein NS4a
+			note	synonym: serine protease NS3
+2251	2273	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	2k protein
+2274	2528	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	non-structural protein NS4b
+2529	3433	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	RNA-directed RNA polymerase NS5
+>Features gi|397790878|gb|JX070655.1|
+97	3683	gene
+			locus_tag	vigor_GP2
+			gene	GP2
+97	3552	CDS
+3552	3683
+			codon_start	1
+			protein_id	gi|397790878.1
+			locus_tag	vigor_GP2
+			gene	GP2
+			product	truncated polyprotein
+			ribosomal_slippage
+97	10398	gene
+			locus_tag	vigor_GP1
+			gene	GP1
+97	10398	CDS
+			codon_start	1
+			protein_id	gi|397790878.2
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	genome polyprotein
+
+>Features gi|397790878.1
+792	1195	mat_peptide
+			locus_tag	vigor_GP2
+			gene	GP2
+			product	non-structural protein NS1'
+
+>Features gi|397790878.2
+1	123	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	anchored capsid protein C
+124	290	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	M protein
+291	791	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	envelope protein E
+792	1143	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	non-structural protein NS1
+1144	1374	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	non-structural protein NS2a
+1375	1505	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	non-structural protein NS2b
+			note	synonym: serine protease subunit NS2B
+1506	2124	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	non-structural protein NS3
+2125	2250	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	non-structural protein NS4a
+			note	synonym: serine protease NS3
+2251	2273	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	2k protein
+2274	2528	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	non-structural protein NS4b
+2529	3433	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	RNA-directed RNA polymerase NS5
+>Features gi|397770647|gb|JX041634.1|
+97	3683	gene
+			locus_tag	vigor_GP2
+			gene	GP2
+97	3552	CDS
+3552	3683
+			codon_start	1
+			protein_id	gi|397770647.1
+			locus_tag	vigor_GP2
+			gene	GP2
+			product	truncated polyprotein
+			ribosomal_slippage
+97	10398	gene
+			locus_tag	vigor_GP1
+			gene	GP1
+97	10398	CDS
+			codon_start	1
+			protein_id	gi|397770647.2
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	genome polyprotein
+
+>Features gi|397770647.1
+792	1195	mat_peptide
+			locus_tag	vigor_GP2
+			gene	GP2
+			product	non-structural protein NS1'
+
+>Features gi|397770647.2
+1	123	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	anchored capsid protein C
+124	290	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	M protein
+291	791	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	envelope protein E
+792	1143	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	non-structural protein NS1
+1144	1374	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	non-structural protein NS2a
+1375	1505	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	non-structural protein NS2b
+			note	synonym: serine protease subunit NS2B
+1506	2124	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	non-structural protein NS3
+2125	2250	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	non-structural protein NS4a
+			note	synonym: serine protease NS3
+2251	2273	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	2k protein
+2274	2528	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	non-structural protein NS4b
+2529	3433	mat_peptide
+			locus_tag	vigor_GP1
+			gene	GP1
+			product	RNA-directed RNA polymerase NS5
