@@ -36,7 +36,10 @@ else:
 GENOTYPER_JAR_NAME = "StandAloneRtvAGenotyper.jar"
 GENOTYPER_CONFIG_NAME = "rotaAGenotyper.config"
 
-BASE_URL = os.environ["P3_BASE_URL"]
+if "P3_BASE_URL" in os.environ:
+  BASE_URL = os.environ["P3_BASE_URL"]
+else:
+  BASE_URL = "https://www.bv-brc.org"
 
 MAFFT_OUTPUT_F_NAME = "ref_MSA_with_query_seqs.fasta"
 PPLACER_OUTPUT_F_NAME = "out.json"
