@@ -33,9 +33,6 @@ if os.path.exists(rota_genotyper_deployed):
 else:
   ROTA_GENOTYPER_PATH = rota_genotyper_dev
 
-GENOTYPER_JAR_NAME = "StandAloneRtvAGenotyper.jar"
-GENOTYPER_CONFIG_NAME = "rotaAGenotyper.config"
-
 if "P3_BASE_URL" in os.environ:
   BASE_URL = os.environ["P3_BASE_URL"]
 else:
@@ -112,7 +109,7 @@ if __name__ == "__main__" :
 
   virus_type = job_data["virus_type"]
   if virus_type == 'ROTAA':
-    rota_genotyper_cmd = ["java", "-jar", os.path.join(ROTA_GENOTYPER_PATH, GENOTYPER_JAR_NAME), os.path.join(ROTA_GENOTYPER_PATH, GENOTYPER_CONFIG_NAME), input_file]
+    rota_genotyper_cmd = ["ss-rotaA-genotyper", input_file]
     try:
       subprocess.check_call(rota_genotyper_cmd, shell=False)
 
