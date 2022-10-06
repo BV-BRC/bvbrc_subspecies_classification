@@ -1,0 +1,13 @@
+#path to the rotaAGenotyper blast database - must path to the fasta file in the same directory as the .nhr, .nin and .nsq files
+path.to.blast_db = [% module_lib %]/rota-a-genotyper/ref-db/RotaC_ReferenceDb_v15.1_14_NOV_2013.fixed.2.VIGOR_ORF_ONLY.fasta
+
+#path to legacy blast 2.2 blastall executable (bin/blastall)
+#path.to.blastall = /vol/patric3/cli/runtime/bin/blastall 
+path.to.blastall = [% kb_runtime %]/bin/blastall
+
+#path to temp directory to use to store temp files needed to run VIGOR
+#if directory does not exist, it will be created
+path.to.tempDir = /disks/tmp
+
+#path to VIGOR3.pl
+path.to.vigor = [% module_lib %]/rota-a-genotyper/VIGOR3/prod3/VIGOR3.pl
