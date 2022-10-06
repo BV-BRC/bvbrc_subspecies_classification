@@ -46,8 +46,14 @@ PPLACER_OUTPUT_F_NAME = "out.json"
 GUPPY_OUTPUT_F_NAME = "out.sing.tre"
 CLADINATOR_OUTPUT_F_NAME = "cladinator_results.tsv"
 
+GENOTYPER_RESULT_F_NAME = "input.fasta.result"
+GENOTYPER_ERROR_F_NAME = "input.fasta.err"
+
 CLADE_DELIMITER = "'.+\{(.+)\}'"
 REPORT_DATE = "<span>Report Date:</span> %s"
+TABLE_HEADER_C = "<th class=\"dgrid-cell dgrid-cell-padding\">Query Identifier</th><th class=\"dgrid-cell dgrid-cell-padding\">Clade Classification</th><th class=\"dgrid-cell dgrid-cell-padding\">Tree Link</th>"
+TABLE_HEADER_R_RESULT = "<th class=\"dgrid-cell dgrid-cell-padding\">Input FASTA unique ID</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Segment number</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Genotype</th><th class=\"dgrid-cell dgrid-cell-padding\">Best hit accession</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:13%\">Query coverage %</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Ident %</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">E Value</th>"
+TABLE_HEADER_R_ERR = "<th class=\"dgrid-cell dgrid-cell-padding\">Input FASTA unique ID</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Segment number</th><th class=\"dgrid-cell dgrid-cell-padding\">Error Description</th>"
 TABLE_ROW = "<td class=\"dgrid-cell dgrid-cell-padding\">%{data}</td>"
 TREE_LINK = "<a href=\"%s/view/PhylogeneticTree2/?wsTreeFile=%s/.%s/details/%s.tre&fileType=nwk&isClassification=1&initialValue=%s\" target=\"_blank\">VIEW TREE</a>"
 
@@ -109,6 +115,44 @@ if __name__ == "__main__" :
     rota_genotyper_cmd = ["java", "-jar", os.path.join(ROTA_GENOTYPER_PATH, GENOTYPER_JAR_NAME), os.path.join(ROTA_GENOTYPER_PATH, GENOTYPER_CONFIG_NAME), input_file]
     try:
       subprocess.check_call(rota_genotyper_cmd, shell=False)
+
+      #Create html summary file from result and error files
+      report_file = os.path.join(output_dir, job_data["output_file"] + "_classification_report.html")
+      with open(REPORT_TEMPLATE_PATH, 'r') as f:
+        html_data = f.readlines()
+
+      html_data[60] = REPORT_DATE %(datetime.now().strftime("%B %d, %Y %H:%M:%S"))
+
+      result_rows = ""
+      result_file = os.path.join(output_dir, GENOTYPER_RESULT_F_NAME)
+      with open(result_file, "r") as f:
+        lines = f.readlines()[1:]
+        if len(lines) > 0:
+          html_data[68] = TABLE_HEADER_R_RESULT
+          for line in lines:
+            split = line.split('\t')
+            result_rows += "<tr>"
+            for data in split:
+              result_rows += TABLE_ROW.replace("%{data}", data)
+            result_rows += "</tr>"
+      html_data[70] = result_rows
+
+      error_rows = ""
+      error_file = os.path.join(output_dir, GENOTYPER_ERROR_F_NAME)
+      with open(error_file, "r") as f:
+        lines = f.readlines()[1:]
+        if len(lines) > 0:
+          html_data[76] = TABLE_HEADER_R_ERR
+          for line in lines:
+            split = line.split('\t')
+            error_rows += "<tr>"
+            for data in split:
+              error_rows += TABLE_ROW.replace("%{data}", data)
+            error_rows += "</tr>"
+      html_data[78] = error_rows
+
+      with open(report_file, 'w') as f:
+        f.writelines(html_data)
     except Exception as e:
       print("Error running rotavirus a genotyper:\n %s" %(e))
       sys.exit(-1)
@@ -139,29 +183,6 @@ if __name__ == "__main__" :
       except Exception as e:
         print("Error copying mfa fasta file from workspace:\n %s" %(e))
         sys.exit(-1)
-  
-    #Define input file
-    input_file = os.path.join(output_dir, "input.fasta")
-    if job_data["input_source"] == "fasta_file":
-      #Fetch input file from workspace
-      try:
-        fetch_fasta_cmd = ["p3-cp", "ws:%s" %(job_data["input_fasta_file"]), input_file] 
-        subprocess.check_call(fetch_fasta_cmd, shell=False)
-      except Exception as e:
-        print("Error copying fasta file from workspace:\n %s" %(e))
-        sys.exit(-1)
-    elif job_data["input_source"] == "fasta_data":
-      #Copy user data to input file
-      try:
-        with open(input_file, "w+") as input:
-          input.write(job_data["input_fasta_data"])
-      except Exception as e:
-        print("Error copying fasta data to input file:\n %s" %(e))
-        sys.exit(-1)  
-  
-    if os.path.getsize(input_file) == 0:
-      print("Input fasta file is empty")
-      sys.exit(-1)
         
     #Aligning of the query sequence(s) to the reference multiple sequence alignment
     mafft_cmd = ["mafft", "--add", input_file, reference_mfa_file]
@@ -251,22 +272,27 @@ if __name__ == "__main__" :
         rows += "</tr>"
   
       html_data[60] = REPORT_DATE %(datetime.now().strftime("%B %d, %Y %H:%M:%S"))
-      html_data[72] = rows
+      html_data[68] = TABLE_HEADER_C
+      html_data[70] = rows
       with open(report_file, 'w') as f:
         f.writelines(html_data)
   
       #Remove initial result 
       #os.remove(output_file)
-  
-      #Move data files to details folde
-      details_folder = os.path.join(output_dir, "details")
-      if not os.path.exists(details_folder):
-        os.mkdir(details_folder)
-  
-      files = os.listdir(output_dir)
-      for f in files:
-        if not f.endswith("html"):
-          shutil.move(os.path.join(output_dir, f), details_folder)
     except Exception as e:
       print("Error running cladinator:\n %s" %(e))
       sys.exit(-1)
+
+  try:
+    #Move data files to details folder
+    details_folder = os.path.join(output_dir, "details")
+    if not os.path.exists(details_folder):
+      os.mkdir(details_folder)
+
+    files = os.listdir(output_dir)
+    for f in files:
+      if not f.endswith("html"):
+        shutil.move(os.path.join(output_dir, f), details_folder)
+  except Exception as e:
+    print("Error moving data files to details folder:\n %s" %(e))
+    sys.exit(-1)
