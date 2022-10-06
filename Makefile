@@ -25,19 +25,37 @@ PROD_TESTS = $(wildcard t/prod-tests/*.t)
 STARMAN_WORKERS = 8
 STARMAN_MAX_REQUESTS = 100
 
-TPAGE_ARGS = --define kb_top=$(TARGET) --define kb_runtime=$(DEPLOY_RUNTIME) --define kb_service_name=$(SERVICE) \
+TPAGE_BUILD_ARGS =  \
+	--define kb_top=$(realpath $(TOP_DIR)) \
+	--define kb_runtime=$(KB_RUNTIME) \
+	--define module_lib=$(realpath $(TOP_DIR))/modules/bvbrc_subspecies_classification/lib
+
+TPAGE_DEPLOY_ARGS =  \
+	--define kb_top=$(TARGET) \
+	--define kb_runtime=$(DEPLOY_RUNTIME) \
+	--define module_lib=$(TARGET)/lib
+
+
+TPAGE_ARGS = --define kb_service_name=$(SERVICE) \
 	--define kb_service_port=$(SERVICE_PORT) --define kb_service_dir=$(SERVICE_DIR) \
 	--define kb_sphinx_port=$(SPHINX_PORT) --define kb_sphinx_host=$(SPHINX_HOST) \
 	--define kb_starman_workers=$(STARMAN_WORKERS) \
 	--define kb_starman_max_requests=$(STARMAN_MAX_REQUESTS)
 
-all: bin 
+all: build-libs bin 
 
-bin: $(BIN_PERL) $(BIN_SERVICE_PERL) $(BIN_PYTHON)
+bin: $(BIN_PERL) $(BIN_SERVICE_PERL) $(BIN_PYTHON) $(BIN_SH)
+
+build-libs:
+	$(TPAGE) $(TPAGE_BUILD_ARGS) $(TPAGE_ARGS) rotaAGenotyper.config.tt > lib/rota-a-genotyper/rotaAGenotyper.config
+
 
 deploy: deploy-all
 deploy-all: deploy-client 
-deploy-client: deploy-libs deploy-scripts deploy-docs
+deploy-client: deploy-libs deploy-scripts deploy-docs deploy-config
+
+deploy-config:
+	$(TPAGE) $(TPAGE_DEPLOY_ARGS) $(TPAGE_ARGS) rotaAGenotyper.config.tt > $(TARGET)/lib/rota-a-genotyper/rotaAGenotyper.config
 
 deploy-service: deploy-libs deploy-scripts deploy-service-scripts deploy-specs
 
