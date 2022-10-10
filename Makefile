@@ -65,10 +65,12 @@ deploy-client: deploy-libs deploy-scripts deploy-docs deploy-config
 deploy-config:
 	$(TPAGE) $(TPAGE_DEPLOY_ARGS) $(TPAGE_ARGS) rotaAGenotyper.config.tt > $(TARGET)/lib/rota-a-genotyper/rotaAGenotyper.config
 	for tool in perl blastall bl2seq formatdb fastacmd clustalw muscle; do \
-	    tpath=lib/rota-a-genotyper/VIGOR3/prod3/$$tool; \
+	    tpath=$(TARGET)/lib/rota-a-genotyper/VIGOR3/prod3/$$tool; \
 	    rm $$tpath; \
 	    ln -s $(DEPLOY_RUNTIME)/bin/$$tool $$tpath; \
 	done
+	rm -rf $(TARGET)/lib/rota-a-genotyper/VIGOR3/prod3/vigorscratch
+	ln -s /disks/tmp $(TARGET)/lib/rota-a-genotyper/VIGOR3/prod3/vigorscratch
 
 deploy-service: deploy-libs deploy-scripts deploy-service-scripts deploy-specs
 
