@@ -1,0 +1,7 @@
+{
+    "input_source": "fasta_file",
+    "virus_type": "JAPENCEPH",
+    "output_file": "japanese_enc_virus",
+    "output_path": "/mkuscuog@bvbrc/home/subspecies/output",
+    "input_fasta_file": "/mkuscuog@bvbrc/home/subspecies/input/Japanese_encephalitis_virus.fasta"
+}
