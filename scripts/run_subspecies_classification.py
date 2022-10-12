@@ -3,6 +3,7 @@
 import argparse
 from datetime import datetime
 import json
+import re
 import os
 import shutil
 import subprocess
@@ -225,14 +226,14 @@ if __name__ == "__main__" :
         for line in f:
           split = line.split('\t')
           query = split[0]
-          if split[1] == "Matching Clades":
+          if split[1] == "Matching Clades" and (not query_dict.has_key(query) or query_dict[query] == "?"):
             query_dict[query] = split[2]
           elif split[1] == "Matching Down-tree Bracketing Clades" and query_dict[query] == "?":
             #Use down-tree classification value if matching clade is ?
             if split[2] == "?":
               query_dict[query] = "Sequence cannot be classified based on the reference tree"
             else:
-              query_dict[query] = split[2]
+              query_dict[query] = split[2] + "-like"
       
       #Generate tre files for each query
       file_name_syntax = "%s.tre"
@@ -263,8 +264,8 @@ if __name__ == "__main__" :
       for key, value in query_dict.iteritems():
         rows += "<tr>"
         rows += TABLE_ROW.replace("%{data}", key)
-        rows += TABLE_ROW.replace("%{data}", value + "-like")
-        initial_value = value.startswith("Sequence") and "" or value
+        rows += TABLE_ROW.replace("%{data}", value)
+        initial_value = value.startswith("Sequence") and "" or re.sub("\-like$", "", value) 
         rows += TABLE_ROW.replace("%{data}", TREE_LINK %(BASE_URL, job_data["output_path"], job_data["output_file"], key, initial_value))
         rows += "</tr>"
   
