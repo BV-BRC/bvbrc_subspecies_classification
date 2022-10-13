@@ -1,0 +1,7 @@
+{
+    "input_source": "fasta_file",
+    "input_fasta_file": "/mkuscuog@bvbrc/home/subspecies/input/dengue.fasta",
+    "virus_type": "DENGUE",
+    "output_file": "output_singularity_selected_dengue_html",
+    "output_path": "/mkuscuog@bvbrc/home/subspecies/output"
+}

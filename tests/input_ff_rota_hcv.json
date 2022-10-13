@@ -1,0 +1,7 @@
+{
+    "input_source": "fasta_file",
+    "input_fasta_file": "/mkuscuog@bvbrc/home/subspecies/input/rota_a_hcv_2.fasta",
+    "virus_type": "ROTAA",
+    "output_file": "rota_hcv_html",
+    "output_path": "/mkuscuog@bvbrc/home/subspecies/output"
+}
