@@ -51,21 +51,21 @@ RAxML was called as follows:
 /home/lambda/SOFT/RAxML-7.2.6/raxmlHPC -m GTRGAMMA -s refseq_ZikaVirus_33_ni_aln -n refseq_ZikaVirus_33_ni_raxml_GTR 
 
 
-Inference[0]: Time 36.746064 GAMMA-based likelihood -56863.693155, best rearrangement setting 5
-alpha[0]: 0.338183 rates[0] ac ag at cg ct gt: 1.305128 4.020139 1.028572 0.370131 12.365922 1.000000 
+Inference[0]: Time 38.156155 GAMMA-based likelihood -56863.689924, best rearrangement setting 5
+alpha[0]: 0.336516 rates[0] ac ag at cg ct gt: 1.302280 4.020772 1.027450 0.368706 12.372306 1.000000 
 
 
 Conducting final model optimizations on all 1 trees under GAMMA-based models ....
 
-Inference[0] final GAMMA-based Likelihood: -56858.543193 tree written to file /home/lambda/Dropbox/WORK/JCVI/REF_TREES/Flavivirus/trees_for_ppplacer/RAxML_result.refseq_ZikaVirus_33_ni_raxml_GTR
+Inference[0] final GAMMA-based Likelihood: -56858.535904 tree written to file /home/lambda/Dropbox/WORK/JCVI/REF_TREES/Flavivirus/trees_for_pplacer/zika2/RAxML_result.refseq_ZikaVirus_33_ni_raxml_GTR
 
 
-Starting final GAMMA-based thorough Optimization on tree 0 likelihood -56858.543193 .... 
+Starting final GAMMA-based thorough Optimization on tree 0 likelihood -56858.535904 .... 
 
-Final GAMMA-based Score of best tree -56858.543018
+Final GAMMA-based Score of best tree -56858.535904
 
-Program execution info written to /home/lambda/Dropbox/WORK/JCVI/REF_TREES/Flavivirus/trees_for_ppplacer/RAxML_info.refseq_ZikaVirus_33_ni_raxml_GTR
-Best-scoring ML tree written to: /home/lambda/Dropbox/WORK/JCVI/REF_TREES/Flavivirus/trees_for_ppplacer/RAxML_bestTree.refseq_ZikaVirus_33_ni_raxml_GTR
+Program execution info written to /home/lambda/Dropbox/WORK/JCVI/REF_TREES/Flavivirus/trees_for_pplacer/zika2/RAxML_info.refseq_ZikaVirus_33_ni_raxml_GTR
+Best-scoring ML tree written to: /home/lambda/Dropbox/WORK/JCVI/REF_TREES/Flavivirus/trees_for_pplacer/zika2/RAxML_bestTree.refseq_ZikaVirus_33_ni_raxml_GTR
 
-Overall execution time: 53.225243 secs or 0.014785 hours or 0.000616 days
+Overall execution time: 54.816081 secs or 0.015227 hours or 0.000634 days
 
