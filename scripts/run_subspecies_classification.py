@@ -47,7 +47,8 @@ CLADINATOR_OUTPUT_F_NAME = "cladinator_results.tsv"
 GENOTYPER_RESULT_F_NAME = "input.fasta.result"
 GENOTYPER_ERROR_F_NAME = "input.fasta.err"
 
-CLADE_DELIMITER = "'.+\{(.+)\}'"
+CLADE_DELIMITER = "(.+?)\|.+"
+CLADE_DELIMITER_INFLUENZAH5 = ".+_\{(.+)\}"
 REPORT_DATE = "<span>Report Date:</span> %s"
 TABLE_HEADER_C = "<th class=\"dgrid-cell dgrid-cell-padding\">Query Identifier</th><th class=\"dgrid-cell dgrid-cell-padding\">Clade Classification</th><th class=\"dgrid-cell dgrid-cell-padding\">Tree Link</th>"
 TABLE_HEADER_R_RESULT = "<th class=\"dgrid-cell dgrid-cell-padding\">Input FASTA unique ID</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Segment number</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Genotype</th><th class=\"dgrid-cell dgrid-cell-padding\">Best hit accession</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:13%\">Query coverage %</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Ident %</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">E Value</th>"
@@ -171,6 +172,8 @@ if __name__ == "__main__" :
         reference_tree_file = os.path.join(ref_folder_path, file)
       elif file.find("info.") != -1:
         stats_file = os.path.join(ref_folder_path, file)
+      elif file.endswith(".tsv"):
+        h5_mapping_file = os.path.join(ref_folder_path, file)
   
     #Get reference MSA file from workspace if selected
     if "ref_msa_fasta" in job_data:
@@ -212,13 +215,17 @@ if __name__ == "__main__" :
     #Cladinator
     guppy_output = os.path.join(output_dir, GUPPY_OUTPUT_F_NAME)
     cladinator_output = os.path.join(output_dir, CLADINATOR_OUTPUT_F_NAME)
-    cladinator_cmd = ["cladinator", "-S=(.+?)\|.+", guppy_output, output_file]
-    #if "clade_mapping" in job_data:
-    #  mapping_cmd = ["-m=%s" %(job_data["clade_mapping"]), "-S=%s" %(CLADE_DELIMITER)]
-    #  cladinator_cmd.extend(mapping_cmd)
+    delimiter = virus_type == "INFLUENZAH5" and CLADE_DELIMITER_INFLUENZAH5 or CLADE_DELIMITER
+    cladinator_cmd = ["cladinator", "-S=%s" %(delimiter), guppy_output, output_file]
+    if virus_type == "INFLUENZAH5":
+      cladinator_cmd.insert(5, "-m=%s" %(h5_mapping_file))
     try:
       subprocess.check_call(cladinator_cmd, shell=False)
-  
+    except Exception as e:
+      print("Error running cladinator:\n %s" %(e))
+      sys.exit(-1)
+ 
+    try:
       #Generate query dictionary to match with tre files in next step
       query_dict = {}
       with open(output_file, "r") as f:
@@ -235,6 +242,9 @@ if __name__ == "__main__" :
             else:
               query_dict[query] = split[2] + "-like"
       
+      if virus_type == "INFLUENZAH5":
+        decorator_output = os.path.join(output_dir, "outtree.tre")
+        decorator_cmd = ["java", "-Xmx8048m", "-cp", FORESTER_PATH, "org.forester.application.decorator", "-f=n", "-nh", "INPUT_TRE_FILE", h5_mapping_file, decorator_output]
       #Generate tre files for each query
       file_name_syntax = "%s.tre"
       with open(guppy_output, "r") as f:
@@ -245,8 +255,19 @@ if __name__ == "__main__" :
               file_name = file_name_syntax %(key) 
               break
           if "file_name" in dir():
-            with open(os.path.join(output_dir, file_name), "w") as q:
+            file_path = os.path.join(output_dir, file_name)
+            with open(file_path, "w") as q:
               q.write(lines[i])
+
+            #Update tre file for influenza to display labels in phylogenetic tree
+            if virus_type == "INFLUENZAH5":
+              try:
+                decorator_cmd[7] = file_path
+                subprocess.check_call(decorator_cmd, shell=False)
+                shutil.move(decorator_output, file_path)
+              except Exception as e:
+                print("Error running decorator for %s:\n %s" %(file_name, e))
+                sys.exit(-1)
   
       #Create summary file
       result_file = os.path.join(output_dir, "result.tsv")
@@ -278,7 +299,7 @@ if __name__ == "__main__" :
       #Remove initial result 
       #os.remove(output_file)
     except Exception as e:
-      print("Error running cladinator:\n %s" %(e))
+      print("Error generating result files:\n %s" %(e))
       sys.exit(-1)
 
   try:

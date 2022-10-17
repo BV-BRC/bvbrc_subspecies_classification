@@ -1,0 +1,7 @@
+{
+    "input_source": "fasta_file",
+    "virus_type": "INFLUENZAH5",
+    "output_file": "influenza_h5",
+    "output_path": "/mkuscuog@bvbrc/home/subspecies/output",
+    "input_fasta_file": "/mkuscuog@bvbrc/home/subspecies/input/influenza_h5.fasta"
+}
