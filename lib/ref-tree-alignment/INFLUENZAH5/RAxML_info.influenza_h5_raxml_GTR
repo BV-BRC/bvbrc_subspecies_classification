@@ -1,0 +1,61 @@
+
+
+This is RAxML version 7.2.6 released by Alexandros Stamatakis in February 2010.
+
+With greatly appreciated code contributions by:
+Andre Aberer (TUM)
+Simon Berger (TUM)
+John Cazes (TACC)
+Michael Ott (TUM)
+Nick Pattengale (UNM)
+Wayne Pfeiffer (SDSC)
+
+
+Alignment has 1200 distinct alignment patterns
+
+Proportion of gaps and completely undetermined characters in this alignment: 2.32%
+
+RAxML rapid hill-climbing mode
+
+Using 1 distinct models/data partitions with joint branch length optimization
+
+
+Executing 1 inferences on the original alignment using 1 distinct randomized MP trees
+
+All free model parameters will be estimated by RAxML
+GAMMA model of rate heteorgeneity, ML estimate of alpha-parameter
+
+GAMMA Model parameters will be estimated up to an accuracy of 0.1000000000 Log Likelihood units
+
+Partition: 0
+Alignment Patterns: 1200
+Name: No Name Provided
+DataType: DNA
+Substitution Matrix: GTR
+
+
+
+
+RAxML was called as follows:
+
+/home/lambda/SOFT/RAxML-7.2.6/raxmlHPC -m GTRGAMMA -s influenza_h5_aln -n influenza_h5_raxml_GTR 
+
+
+Inference[0]: Time 521.740354 GAMMA-based likelihood -43700.331738, best rearrangement setting 5
+alpha[0]: 0.505973 rates[0] ac ag at cg ct gt: 0.980118 5.615707 0.498967 0.225517 8.113807 1.000000 
+
+
+Conducting final model optimizations on all 1 trees under GAMMA-based models ....
+
+Inference[0] final GAMMA-based Likelihood: -43697.848811 tree written to file /home/lambda/Dropbox/WORK/JCVI/H5/S_405_3_with_prev_ref_seqs/USE_ORIG_ALN/H5_Reference_Tree_Aug_10_2022_v2/newtree/tree_for_pplacer/RAxML_result.influenza_h5_raxml_GTR
+
+
+Starting final GAMMA-based thorough Optimization on tree 0 likelihood -43697.848811 .... 
+
+Final GAMMA-based Score of best tree -43697.848710
+
+Program execution info written to /home/lambda/Dropbox/WORK/JCVI/H5/S_405_3_with_prev_ref_seqs/USE_ORIG_ALN/H5_Reference_Tree_Aug_10_2022_v2/newtree/tree_for_pplacer/RAxML_info.influenza_h5_raxml_GTR
+Best-scoring ML tree written to: /home/lambda/Dropbox/WORK/JCVI/H5/S_405_3_with_prev_ref_seqs/USE_ORIG_ALN/H5_Reference_Tree_Aug_10_2022_v2/newtree/tree_for_pplacer/RAxML_bestTree.influenza_h5_raxml_GTR
+
+Overall execution time: 752.721399 secs or 0.209089 hours or 0.008712 days
+
