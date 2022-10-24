@@ -244,7 +244,7 @@ if __name__ == "__main__" :
       
       if virus_type == "INFLUENZAH5":
         decorator_output = os.path.join(output_dir, "outtree.tre")
-        decorator_cmd = ["java", "-Xmx8048m", "-cp", FORESTER_PATH, "org.forester.application.decorator", "-f=n", "-nh", "INPUT_TRE_FILE", h5_mapping_file, decorator_output]
+        decorator_cmd = ["decorator", "-f=n", "-nh", "INPUT_TRE_FILE", h5_mapping_file, decorator_output]
       #Generate tre files for each query
       file_name_syntax = "%s.tre"
       with open(guppy_output, "r") as f:
@@ -262,7 +262,7 @@ if __name__ == "__main__" :
             #Update tre file for influenza to display labels in phylogenetic tree
             if virus_type == "INFLUENZAH5":
               try:
-                decorator_cmd[7] = file_path
+                decorator_cmd[3] = file_path
                 subprocess.check_call(decorator_cmd, shell=False)
                 shutil.move(decorator_output, file_path)
               except Exception as e:
