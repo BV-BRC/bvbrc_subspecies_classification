@@ -252,7 +252,8 @@ if __name__ == "__main__" :
         for i in range(len(lines)):
           for key in query_dict:
             if key in lines[i]:
-              file_name = file_name_syntax %(key) 
+              key = re.sub("[^a-zA-Z0-9 \n\.]", "_", key) 
+              file_name = file_name_syntax %(key)
               break
           if "file_name" in dir():
             file_path = os.path.join(output_dir, file_name)
@@ -287,7 +288,7 @@ if __name__ == "__main__" :
         rows += TABLE_ROW.replace("%{data}", key)
         rows += TABLE_ROW.replace("%{data}", value)
         initial_value = value.startswith("Sequence") and "" or re.sub("\-like$", "", value) 
-        rows += TABLE_ROW.replace("%{data}", TREE_LINK %(BASE_URL, job_data["output_path"], job_data["output_file"], key, initial_value))
+        rows += TABLE_ROW.replace("%{data}", TREE_LINK %(BASE_URL, job_data["output_path"], job_data["output_file"], re.sub("[^a-zA-Z0-9 \n\.]", "_", key), initial_value))
         rows += "</tr>"
   
       html_data[60] = REPORT_DATE %(datetime.now().strftime("%B %d, %Y %H:%M:%S"))
