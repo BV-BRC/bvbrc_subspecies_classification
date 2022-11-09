@@ -167,7 +167,7 @@ if __name__ == "__main__" :
     reference_tree_file = None
     stats_file = None
     for file in os.listdir(ref_folder_path):
-      if file.endswith(".aln"):
+      if file.endswith(".aln") or file.endswith(".fasta"):
         reference_mfa_file = os.path.join(ref_folder_path, file)
       elif file.endswith(".nh"):
         reference_tree_file = os.path.join(ref_folder_path, file)
