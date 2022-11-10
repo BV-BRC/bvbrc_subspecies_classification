@@ -1,4 +1,4 @@
->0        
+>1|KX229766|Canada/human/2011|2011|Human|Canada
 agacgttcatctgcgtgagcttccgatctcagtattgtttggaaggatca--ttgattaa
 cgcggtttgaacagttttttggagcttttgatttcaaatgtctaaaaaaccaggaggacc
 cgggaagccccgggtcgtcaatatgctaaaacgcggcataccccgcgtattcccactagt
@@ -183,7 +183,7 @@ gagaccctgcggaagaaatgagtggcccaagctcgccgaagctgtaaggcgggtggacgg
 actagaggttagaggagaccccactctcaaaagcatcaaat-aacagcatattgacacct
 gggaaaagactaggagatcttctgctctattccaacatcagtcacaaggcaccgagcgcc
 gaacactgtgactgatgggggagaagaccacaggatct
->1        
+>4|KF751869|MK6684|1966|Mosquito|Papua_New_Guinea
 agacgttcatctgcgtgagcttccgatctcagtattgtttggaaggatca-tttgattaa
 cgcggtttgaacagttttttggagcttttgatttcaaatgtctaaaaaaccaggaggacc
 cgggaagccccgggtcgtcaatatgctaaaacgcggcataccccgcgtattcccattagt
@@ -368,7 +368,7 @@ gagaccctgcggaaacactgagtggcccaaactcgccgaagctgtaaggcgggtggacgg
 actagaggttagaggagaccccactctcaaaagcatcaaacaaacagcatattgacacct
 gggaaaagactaggagatcttctgctctattccaacatcagtcacaaggcaccgagcgcc
 gaatattgtgactgatgggggagaagaccacaggatct
->2        
+>1|KC852190|MVE_1_51_C10|2012|Unknown|Australia
 agacgttcatctgcgtgagcttccgatctcagtattgtttggaaggatca--ttgattaa
 cgcggtttgaacagttttttggagcttttgatttcaaatgtctaaaaaaccaggaggacc
 cgggaagccccgggtcgtcaatatgctaaaacgcggcataccccgcgtattcccactagt
@@ -553,7 +553,7 @@ gagaccctgcggaagaaatgagtggcccaagctcgccgaagctgtaaggcgggtggacgg
 actagaggttagaggagaccccactctcaaaagcatcaaac-aacagcatattgacacct
 gggaaaagactaggagatcttctgctctattccaacatcagtcacaaggcaccgagcgcc
 gaacactgtgactgatgggggagaagaccacaggatct
->3        
+>1|KC852192|MVE_1_51_CD8|2012|Unknown|Australia
 agacgttcatctgcgtgagcttccgatctcagtattgtttggaaggatca--ttgattaa
 cgcggtttgaacagttttttggagcttttgatttcaaatgtctaaaaaaccaggaggacc
 cgggaagccccgggtcgtcaatatgctaaaacgcggcataccccgcgtattcccactagt
@@ -738,7 +738,7 @@ gagaccctgcggaagaaatgagtggcccaagctcgccgaagctgtaaggcgggtggacgg
 actagaggttagaggagaccccactctcaaaagcatcaaac-aacagcatattgacacct
 gggaaaagactaggagatcttctgctctattccaacatcagtcacaaggcaccgagcgcc
 gaacactgtgactgatgggggagaagaccacaggatct
->4        
+>1|KC852191|MVE_1_51_D10|2012|Unknown|Australia
 agacgttcatctgcgtgagcttccgatctcagtattgtttggaaggatca--ttgattaa
 cgcggtttgaacagttttttggagcttttgatttcaaatgtctaaaaaaccaggaggacc
 cgggaagccccgggtcgtcaatatgctaaaacgcggcataccccgcgtattcccactagt
@@ -923,7 +923,7 @@ gagaccctgcggaagaaatgagtggcccaagctcgccgaagctgtaaggcgggtggacgg
 actagaggttagaggagaccccactctcaaaagcatcaaac-aacagcatattgacacct
 gggaaaagactaggagatcttctgctctattccaacatcagtcacaaggcaccgagcgcc
 gaacactgtgactgatgggggagaagaccacaggatct
->5        
+>1|AF161266|MVE_1_51|NA|Unknown|NA
 agacgttcatctgcgtgagcttccgatctcagtattgtttggaaggatca--ttgattaa
 cgcggtttgaacagttttttggagcttttgatttcaaatgtctaaaaaaccaggaggacc
 cgggaagccccgggtcgtcaatatgctaaaacgcggcataccccgcgtattcccactagt
@@ -1108,7 +1108,7 @@ gagaccctgcggaagaaatgagtggcccaagctcgccgaagctgtaaggcgggtggacgg
 actagaggttagaggagaccccactctcaaaagcatcaaac-aacagcatattgacacct
 gggaaaagactaggagatcttctgctctattccaacatcagtcacaaggcaccgagcgcc
 gaacactgtgactgatgggggagaagaccacaggatct
->6        
+>1|NC_000943|MVE_1_51|NA|Unknown|NA
 agacgttcatctgcgtgagcttccgatctcagtattgtttggaaggatca--ttgattaa
 cgcggtttgaacagttttttggagcttttgatttcaaatgtctaaaaaaccaggaggacc
 cgggaagccccgggtcgtcaatatgctaaaacgcggcataccccgcgtattcccactagt
@@ -1293,7 +1293,7 @@ gagaccctgcggaagaaatgagtggcccaagctcgccgaagctgtaaggcgggtggacgg
 actagaggttagaggagaccccactctcaaaagcatcaaac-aacagcatattgacacct
 gggaaaagactaggagatcttctgctctattccaacatcagtcacaaggcaccgagcgcc
 gaacactgtgactgatgggggagaagaccacaggatct
->7        
+>1|KC852189|MVE_1_51_P0|2012|Unknown|Australia
 agacgttcatctgcgtgagcttccgatctcagtattgtttggaaggatca--ttgattaa
 cgcggtttgaacagttttttggagcttttgatttcaaatgtctaaaaaaccaggaggacc
 cgggaagccccgggtcgtcaatatgctaaaacgcggcataccccgcgtattcccactagt
@@ -1478,7 +1478,7 @@ gagaccctgcggaagaaatgagtggcccaagctcgccgaagctgtaaggcgggtggacgg
 actagaggttagaggagaccccactctcaaaagcatcaaac-aacagcatattgacacct
 gggaaaagactaggagatcttctgctctattccaacatcagtcacaaggcaccgagcgcc
 gaacactgtgactgatgggggagaagaccacaggatct
->8        
+>3|KF751870|NG156|1956|Human|Papua_New_Guinea
 agacgttcatctgcgtgagcttccgatctcagtattgtttgggaggatca-tttgattaa
 cgcggtttgaacagttttttggagcttttgatttcaaatgtctaaaaaaccaggaggacc
 cgggaagccccgggtcgtcaatatgctaaaacgcggcataccccgcgtattcccattagt
@@ -1663,7 +1663,7 @@ gagaccctgcggaaacactgagtggcccaagctcgctgaagctgtaaggcgagtggacgg
 actagaggttagaggagaccccactctcaaaagcatcaaacaaacagcatattgacacct
 gggaaaagactaggagatcttctgctctattccaacatcagtcacaaggcaccgagcgcc
 gaacattgtgactgatgggggagaagaccacaggatct
->9        
+>2|KC852193|OR156|2012|Unknown|Australia
 agacgttcatctgcgtgagctttcgatctcagtattgtttgaaaggatcattttgattaa
 cgcggtttgaacagttttttggagcttttgatttcaaatgtctaaaaaaccaggaggacc
 cgggaagccccgggtcgtcaatatgctaagacgcggcataccccgcgtattcccattagt
@@ -1848,7 +1848,7 @@ gagaccctgcggaagcattgagtggcccaagctcgctgaagctgtaaggcgggtggacgg
 actagaggttagaggagaccccactctcacaagcatcaaacaaacagcatattgacacct
 gggaaaagactaggagatcttctgctctattccaacatcagtcgcaaggcaccgagcgcc
 gaatattgtgactgatgggggagaagaccacaggatct
->a        
+>2|KC852194|OR156|2012|Unknown|Australia
 agacgttcatctgcgtgagctttcgatctcagtattgtttgaaaggatcattttgattaa
 cgcggtttgaacagttttttggagcttttgatttcaaatgtctaaaaaaccaggaggacc
 cgggaagccccgggtcgtcaatatgctaagacgcggcataccccgcgtattcccattagt
@@ -2033,7 +2033,7 @@ gagaccctgcggaagcattgagtggcccaagctcgctgaagctgtaaggcgggtggacgg
 actagaggttagaggagaccccactctcacaagcatcaaacaaacagcatattgacacct
 gggaaaagactaggagatcttctgctctattccaacatcagtcgcaaggcaccgagcgcc
 gaatattgtgactgatgggggagaagaccacaggatct
->b        
+>2|KC852195|OR156|2012|Unknown|Australia
 agacgttcatctgcgtgagctttcgatctcagtattgtttgaaaggatcattttgattaa
 cgcggtttgaacagttttttggagcttttgatttcaaatgtctaaaaaaccaggaggacc
 cgggaagccccgggtcgtcaatatgctaagacgcggcataccccgcgtattcccattagt
@@ -2218,7 +2218,7 @@ gagaccctgcggaagcattgagtggcccaagctcgctgaagctgtaaggcgggtggacgg
 actagaggttagaggagaccccactctcacaagcatcaaacaaacagcatattgacacct
 gggaaaagactaggagatcttctgctctattccaacatcagtcgcaaggcaccgagcgcc
 gaatattgtgactgatgggggagaagaccacaggatct
->c        
+>2|KC852196|OR156|2012|Unknown|Australia
 agacgttcatctgcgtgagctttcgatctcagtattgtttgaaaggatcattttgattaa
 cgcggtttgaacagttttttggagcttttgatttcaaatgtctaaaaaaccaggaggacc
 cgggaagccccgggtcgtcaatatgctaagacgcggcataccccgcgtattcccattagt
@@ -2403,7 +2403,7 @@ gagaccctgcggaagcattgagtggcccaagctcgctgaagctgtaaggcgggtggacgg
 actagaggttagaggagaccccactctcacaagcatcaaacaaacagcatattgacacct
 gggaaaagactaggagatcttctgctctattccaacatcagtcgcaaggcaccgagcgcc
 gaatattgtgactgatgggggagaagaccacaggatct
->d        
+>2|KF751871|OR156|1973|Mosquito|Australia
 agacgttcatctgcgtgagctttcgatctcagtattgtttgaaaggatcattttgattaa
 cgcggtttgaacagttttttggagcttttgatttcaaatgtctaaaaaaccaggaggacc
 cgggaagccccgggtcgtcaatatgctaagacgcggcataccccgcgtattcccattagt
@@ -2588,7 +2588,7 @@ gagaccctgcggaagcattgagtggcccaagctcgctgaagctgtaaggcgggtggacgg
 actagaggttagaggagaccccactctcacaagcatcaaacaaacagcatattgacacct
 gggaaaagactaggagatcttctgctctattccaacatcagtcgcaaggcaccgagcgcc
 gaatattgtgactgatgggggagaagaccacaggatct
->e        
+>1|JX123032|V11_10|2011_04_05|Horse|Australia
 agacgttcatctgcgtgagcttccgatctcagtattgtttggaaggatca--ttgattaa
 cgcggtttgaacagttttttggagcttttgatttcaaatgtctaaaaaaccaggaggacc
 cgggaagccccgggtcgtcaatatgctaaaacgcggtataccccgcgtattcccattagt
@@ -2773,7 +2773,7 @@ gagaccctgcggaagaaatgagtggcccaagctcgccgaagctgtaaggcgggtggacgg
 actagaggttagaggagaccccactcttgaaagcatcaaat-aacagcatattgacacct
 gggaaaagactaggagatcttctgctctattccaccatcagtcacaaggcaccgagcgcc
 gaatattgtgactgatgggggggaagacc---------
->f        
+>2|MG452954|VIDRL|2015_05_05|Unknown|Australia
 ----gttcatctgcgtgagctttcgatctcagtattgtttgaaaggatcattttgattaa
 cgcggtttgaacagttttttggagcttttgatttcaaatgtctaaaaaaccaggaggacc
 cgggaaatcccgggtcgtcaatatgctaagacgcggcataccccgcgtattcccattagt
@@ -2958,7 +2958,7 @@ gagaccctgcggaactattgagtggcccaagctcgctgaagctgtaaggcgagtggacgg
 actagaggttagaggagaccccactcacacaagcatcaaacaaacagcatattgacacct
 gggaaaagactaggagatcttctgctctattccaacatcagtcgnaaggcaccgagcgcc
 gaatattgtgactggtgggggggaag------------
->10       
+>1|MN933859|VIDRL_MVE_070418|2018_04_07|Unknown|Australia
 --acgttcatctgcgtgagcttccgatctcagtattgtttggaaggatca--ttgattaa
 cgcggtttgaacagttttttggagcttttgatttcaaatgtctaaaaaaccaggaggacc
 cgggaagccccgggtcgtcaatatgctaaaacgcggcataccccgcgtattcccactagt
@@ -3143,7 +3143,7 @@ gagaccctgcggaagaaatgagtggcccaagctcgccgaagctgtaaggcgggtggacgg
 actagaggttagaggagaccccactctcaaaagcatcaaat-aacagcatattgacacct
 gggaaaagactaggagatcttctgctctattccaacatcagtcacaaggcaccgagcgcc
 gaacactgtgactgatgttggaatagagcagaagatct
->11       
+>4|EF015075
 ------------------------------------------------------------
 ------------------------------------------------------------
 ------------------------------------------------------------
