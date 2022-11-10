@@ -1,0 +1,7 @@
+{
+    "input_source": "fasta_file",
+    "input_fasta_file": "/mkuscuog@bvbrc/home/subspecies/input/murray_valley_encephalitis.fasta",
+    "virus_type": "MURRAY",
+    "output_file": "murray_valley",
+    "output_path": "/mkuscuog@bvbrc/home/subspecies/output"
+}
