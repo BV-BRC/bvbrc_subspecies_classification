@@ -1,0 +1,7 @@
+{
+    "input_source": "fasta_file",
+    "virus_type": "NOROORF2",
+    "output_file": "norovirusorf1",
+    "output_path": "/mkuscuog@bvbrc/home/subspecies/output",
+    "input_fasta_file": "/mkuscuog@bvbrc/home/subspecies/input/norovirus.fasta"
+}
