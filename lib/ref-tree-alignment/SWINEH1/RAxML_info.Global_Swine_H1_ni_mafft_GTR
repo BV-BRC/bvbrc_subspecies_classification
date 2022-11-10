@@ -1,0 +1,71 @@
+
+
+IMPORTANT WARNING: Sequences 5d and 76 are exactly identical
+
+IMPORTANT WARNING
+Found 1 sequence that is exactly identical to other sequences in the alignment.
+Normally they should be excluded from the analysis.
+
+Just in case you might need it, an alignment file with 
+sequence duplicates removed is printed to file Global_Swine_H1_ni_mafft_aln.reduced
+
+
+This is RAxML version 7.2.6 released by Alexandros Stamatakis in February 2010.
+
+With greatly appreciated code contributions by:
+Andre Aberer (TUM)
+Simon Berger (TUM)
+John Cazes (TACC)
+Michael Ott (TUM)
+Nick Pattengale (UNM)
+Wayne Pfeiffer (SDSC)
+
+
+Alignment has 1232 distinct alignment patterns
+
+Proportion of gaps and completely undetermined characters in this alignment: 1.37%
+
+RAxML rapid hill-climbing mode
+
+Using 1 distinct models/data partitions with joint branch length optimization
+
+
+Executing 1 inferences on the original alignment using 1 distinct randomized MP trees
+
+All free model parameters will be estimated by RAxML
+GAMMA model of rate heteorgeneity, ML estimate of alpha-parameter
+
+GAMMA Model parameters will be estimated up to an accuracy of 0.1000000000 Log Likelihood units
+
+Partition: 0
+Alignment Patterns: 1232
+Name: No Name Provided
+DataType: DNA
+Substitution Matrix: GTR
+
+
+
+
+RAxML was called as follows:
+
+/home/lambda/SOFT/RAxML-7.2.6/raxmlHPC -m GTRGAMMA -s Global_Swine_H1_ni_mafft_aln -n Global_Swine_H1_ni_mafft_GTR.nh 
+
+
+Inference[0]: Time 207.126053 GAMMA-based likelihood -60350.544765, best rearrangement setting 5
+alpha[0]: 0.486756 rates[0] ac ag at cg ct gt: 1.264585 6.954673 0.587682 0.257536 7.991427 1.000000 
+
+
+Conducting final model optimizations on all 1 trees under GAMMA-based models ....
+
+Inference[0] final GAMMA-based Likelihood: -60346.227551 tree written to file /home/lambda/Dropbox/WORK/JCVI/REF_TREES/H1_Global_Swine_2/RAxML_result.Global_Swine_H1_ni_mafft_GTR.nh
+
+
+Starting final GAMMA-based thorough Optimization on tree 0 likelihood -60346.227551 .... 
+
+Final GAMMA-based Score of best tree -60346.227551
+
+Program execution info written to /home/lambda/Dropbox/WORK/JCVI/REF_TREES/H1_Global_Swine_2/RAxML_info.Global_Swine_H1_ni_mafft_GTR.nh
+Best-scoring ML tree written to: /home/lambda/Dropbox/WORK/JCVI/REF_TREES/H1_Global_Swine_2/RAxML_bestTree.Global_Swine_H1_ni_mafft_GTR.nh
+
+Overall execution time: 296.560983 secs or 0.082378 hours or 0.003432 days
+

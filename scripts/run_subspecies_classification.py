@@ -49,6 +49,7 @@ GENOTYPER_ERROR_F_NAME = "input.fasta.err"
 
 CLADE_DELIMITER = "(.+?)\|.+"
 CLADE_DELIMITER_INFLUENZAH5 = ".+_\{(.+)\}"
+CLADE_DELIMITER_SWINEH1 = ".+\{(.+)\}"
 REPORT_DATE = "<span>Report Date:</span> %s"
 TABLE_HEADER_C = "<th class=\"dgrid-cell dgrid-cell-padding\">Query Identifier</th><th class=\"dgrid-cell dgrid-cell-padding\">Clade Classification</th><th class=\"dgrid-cell dgrid-cell-padding\">Tree Link</th>"
 TABLE_HEADER_R_RESULT = "<th class=\"dgrid-cell dgrid-cell-padding\">Input FASTA unique ID</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Segment number</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Genotype</th><th class=\"dgrid-cell dgrid-cell-padding\">Best hit accession</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:13%\">Query coverage %</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Ident %</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">E Value</th>"
@@ -166,14 +167,14 @@ if __name__ == "__main__" :
     reference_tree_file = None
     stats_file = None
     for file in os.listdir(ref_folder_path):
-      if file.endswith(".aln"):
+      if file.endswith(".aln") or file.endswith(".fasta"):
         reference_mfa_file = os.path.join(ref_folder_path, file)
       elif file.endswith(".nh"):
         reference_tree_file = os.path.join(ref_folder_path, file)
       elif file.find("info.") != -1:
         stats_file = os.path.join(ref_folder_path, file)
       elif file.endswith(".tsv"):
-        h5_mapping_file = os.path.join(ref_folder_path, file)
+        mapping_file = os.path.join(ref_folder_path, file)
   
     #Get reference MSA file from workspace if selected
     if "ref_msa_fasta" in job_data:
@@ -186,7 +187,7 @@ if __name__ == "__main__" :
         sys.exit(-1)
         
     #Aligning of the query sequence(s) to the reference multiple sequence alignment
-    mafft_cmd = ["mafft", "--add", input_file, reference_mfa_file]
+    mafft_cmd = ["mafft", "--keeplength", "--add", input_file, reference_mfa_file]
     mafft_output = os.path.join(output_dir, MAFFT_OUTPUT_F_NAME)
     try:
       with open(mafft_output, "w+") as o:
@@ -215,10 +216,10 @@ if __name__ == "__main__" :
     #Cladinator
     guppy_output = os.path.join(output_dir, GUPPY_OUTPUT_F_NAME)
     cladinator_output = os.path.join(output_dir, CLADINATOR_OUTPUT_F_NAME)
-    delimiter = virus_type == "INFLUENZAH5" and CLADE_DELIMITER_INFLUENZAH5 or CLADE_DELIMITER
+    delimiter = CLADE_DELIMITER_INFLUENZAH5 if virus_type == "INFLUENZAH5" else (CLADE_DELIMITER_SWINEH1 if virus_type == "SWINEH1" else CLADE_DELIMITER)
     cladinator_cmd = ["cladinator", "-S=%s" %(delimiter), guppy_output, output_file]
-    if virus_type == "INFLUENZAH5":
-      cladinator_cmd.insert(5, "-m=%s" %(h5_mapping_file))
+    if virus_type == "INFLUENZAH5" or virus_type == "SWINEH1":
+      cladinator_cmd.insert(5, "-m=%s" %(mapping_file))
     try:
       subprocess.check_call(cladinator_cmd, shell=False)
     except Exception as e:
@@ -242,9 +243,9 @@ if __name__ == "__main__" :
             else:
               query_dict[query] = split[2] + "-like"
       
-      if virus_type == "INFLUENZAH5":
+      if virus_type == "INFLUENZAH5" or virus_type == "SWINEH1":
         decorator_output = os.path.join(output_dir, "outtree.tre")
-        decorator_cmd = ["decorator", "-f=n", "-nh", "INPUT_TRE_FILE", h5_mapping_file, decorator_output]
+        decorator_cmd = ["decorator", "-f=n", "-nh", "INPUT_TRE_FILE", mapping_file, decorator_output]
       #Generate tre files for each query
       file_name_syntax = "%s.tre"
       with open(guppy_output, "r") as f:
@@ -261,7 +262,7 @@ if __name__ == "__main__" :
               q.write(lines[i])
 
             #Update tre file for influenza to display labels in phylogenetic tree
-            if virus_type == "INFLUENZAH5":
+            if virus_type == "INFLUENZAH5" or virus_type == "SWINEH1":
               try:
                 decorator_cmd[3] = file_path
                 subprocess.check_call(decorator_cmd, shell=False)
