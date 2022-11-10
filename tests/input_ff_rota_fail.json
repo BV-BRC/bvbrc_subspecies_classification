@@ -1,6 +1,6 @@
 {
     "input_source": "fasta_file",
-    "input_fasta_file": "/mkuscuog@bvbrc/home/subspecies/input/hcv_2.fasta",
+    "input_fasta_file": "/olson@patricbrc.org/PATRIC-QA/DataSets/SubspeciesClassification/hcv_2.fasta",
     "virus_type": "ROTAA",
     "output_file": "rota_html_fail",
     "output_path": "/mkuscuog@bvbrc/home/subspecies/output"
