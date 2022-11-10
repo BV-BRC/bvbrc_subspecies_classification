@@ -187,7 +187,7 @@ if __name__ == "__main__" :
         sys.exit(-1)
         
     #Aligning of the query sequence(s) to the reference multiple sequence alignment
-    mafft_cmd = ["mafft", "--add", input_file, reference_mfa_file]
+    mafft_cmd = ["mafft", "--keeplength", "--add", input_file, reference_mfa_file]
     mafft_output = os.path.join(output_dir, MAFFT_OUTPUT_F_NAME)
     try:
       with open(mafft_output, "w+") as o:
