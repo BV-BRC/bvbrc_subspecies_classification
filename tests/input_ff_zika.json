@@ -3,5 +3,5 @@
     "virus_type": "ZIKA",
     "output_file": "zika_fail",
     "output_path": "/mkuscuog@bvbrc/home/assembly/output",
-    "input_fasta_file": "/mkuscuog@bvbrc/home/subspecies/input/zika_fail.fasta"
+    "input_fasta_file": "/olson@patricbrc.org/PATRIC-QA/DataSets/SubspeciesClassification/zika_fail.fasta"
 }

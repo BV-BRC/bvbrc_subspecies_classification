@@ -254,6 +254,9 @@ if __name__ == "__main__" :
           for key in query_dict:
             if key in lines[i]:
               key = re.sub("[^a-zA-Z0-9 \n\.]", "_", key) 
+              if len(key) > 250:
+                print('File name is too long. Truncating it')
+                key = key[0:200] + '_'
               file_name = file_name_syntax %(key)
               break
           if "file_name" in dir():
@@ -289,6 +292,9 @@ if __name__ == "__main__" :
         rows += TABLE_ROW.replace("%{data}", key)
         rows += TABLE_ROW.replace("%{data}", value)
         initial_value = value.startswith("Sequence") and "" or re.sub("\-like$", "", value) 
+        #TODO: handle file name truncating in a function during dict creation
+        if len(key) > 250:
+          key = key[0:200] + '_'
         rows += TABLE_ROW.replace("%{data}", TREE_LINK %(BASE_URL, job_data["output_path"], job_data["output_file"], re.sub("[^a-zA-Z0-9 \n\.]", "_", key), initial_value))
         rows += "</tr>"
   
