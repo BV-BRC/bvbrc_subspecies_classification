@@ -15,24 +15,33 @@ import sys
 top = os.getenv("KB_TOP")
 tree_deployed = os.path.join(top, "lib", "ref-tree-alignment");
 tree_dev = os.path.join(top, "modules", "bvbrc_subspecies_classification", "lib", "ref-tree-alignment");
+tree_local = os.path.join("/home", "ac.mkuscuog", "git", "bvbrc_subspecies_classification", "lib", "ref-tree-alignment");
 if os.path.exists(tree_deployed):
   ALIGNMENT_PATH = tree_deployed
-else:
+elif os.path.exists(tree_dev):
   ALIGNMENT_PATH = tree_dev
+else:
+  ALIGNMENT_PATH = tree_local
 
 report_deployed = os.path.join(top, "lib", "classification_report.html");
 report_dev = os.path.join(top, "modules", "bvbrc_subspecies_classification", "lib", "classification_report.html");
-if os.path.exists(tree_deployed):
+report_local = os.path.join("/home", "ac.mkuscuog", "git", "bvbrc_subspecies_classification", "lib", "classification_report.html");
+if os.path.exists(report_deployed):
   REPORT_TEMPLATE_PATH = report_deployed
-else:
+elif os.path.exists(report_dev):
   REPORT_TEMPLATE_PATH = report_dev 
+else:
+  REPORT_TEMPLATE_PATH = report_local
 
 rota_genotyper_deployed = os.path.join(top, "lib", "rota-a-genotyper");
 rota_genotyper_dev = os.path.join(top, "modules", "bvbrc_subspecies_classification", "lib", "rota-a-genotyper");
+rota_genotyper_local = os.path.join("/home", "ac.mkuscuog", "git", "bvbrc_subspecies_classification", "lib", "rota-a-genotyper");
 if os.path.exists(rota_genotyper_deployed):
   ROTA_GENOTYPER_PATH = rota_genotyper_deployed
-else:
+elif os.path.exists(rota_genotyper_dev):
   ROTA_GENOTYPER_PATH = rota_genotyper_dev
+else:
+  ROTA_GENOTYPER_PATH = rota_genotyper_local
 
 if "P3_BASE_URL" in os.environ:
   BASE_URL = os.environ["P3_BASE_URL"]
@@ -216,10 +225,13 @@ if __name__ == "__main__" :
     #Cladinator
     guppy_output = os.path.join(output_dir, GUPPY_OUTPUT_F_NAME)
     cladinator_output = os.path.join(output_dir, CLADINATOR_OUTPUT_F_NAME)
-    delimiter = CLADE_DELIMITER_INFLUENZAH5 if virus_type == "INFLUENZAH5" else (CLADE_DELIMITER_SWINEH1 if virus_type == "SWINEH1" else CLADE_DELIMITER)
-    cladinator_cmd = ["cladinator", "-S=%s" %(delimiter), guppy_output, output_file]
+
+    cladinator_cmd = ["cladinator", guppy_output, output_file]
     if virus_type == "INFLUENZAH5" or virus_type == "SWINEH1":
-      cladinator_cmd.insert(5, "-m=%s" %(mapping_file))
+      delimiter = CLADE_DELIMITER_INFLUENZAH5 if virus_type == "INFLUENZAH5" else (CLADE_DELIMITER_SWINEH1 if virus_type == "SWINEH1" else CLADE_DELIMITER)
+      cladinator_cmd.insert(1, "-S=%s" %(delimiter))
+    if virus_type == "INFLUENZAH5" or virus_type == "SWINEH1" or virus_type == "SWINEH3":
+      cladinator_cmd.insert(1, "-m=%s" %(mapping_file))
     try:
       subprocess.check_call(cladinator_cmd, shell=False)
     except Exception as e:
@@ -243,7 +255,7 @@ if __name__ == "__main__" :
             else:
               query_dict[query] = split[2] + "-like"
       
-      if virus_type == "INFLUENZAH5" or virus_type == "SWINEH1":
+      if virus_type == "INFLUENZAH5" or virus_type == "SWINEH1" or virus_type == "SWINEH3":
         decorator_output = os.path.join(output_dir, "outtree.tre")
         decorator_cmd = ["decorator", "-f=n", "-nh", "INPUT_TRE_FILE", mapping_file, decorator_output]
       #Generate tre files for each query
@@ -265,7 +277,7 @@ if __name__ == "__main__" :
               q.write(lines[i])
 
             #Update tre file for influenza to display labels in phylogenetic tree
-            if virus_type == "INFLUENZAH5" or virus_type == "SWINEH1":
+            if virus_type == "INFLUENZAH5" or virus_type == "SWINEH1" or virus_type == "SWINEH3":
               try:
                 decorator_cmd[3] = file_path
                 subprocess.check_call(decorator_cmd, shell=False)

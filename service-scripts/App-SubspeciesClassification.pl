@@ -31,7 +31,7 @@ sub preflight
     return {
 	cpu => 2,
 	memory => "16G",
-	runtime => 3600,
+	runtime => 10800,
 	storage => 0,
     };
 }
