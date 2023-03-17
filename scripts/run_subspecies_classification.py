@@ -13,8 +13,8 @@ import sys
 # Determine path to our alignments.
 #
 top = os.getenv("KB_TOP")
-tree_deployed = os.path.join(top, "lib2", "ref-tree-alignment");
-tree_dev = os.path.join(top, "modules2", "bvbrc_subspecies_classification", "lib", "ref-tree-alignment");
+tree_deployed = os.path.join(top, "lib", "ref-tree-alignment");
+tree_dev = os.path.join(top, "modules", "bvbrc_subspecies_classification", "lib", "ref-tree-alignment");
 tree_local = os.path.join("/home", "ac.mkuscuog", "git", "bvbrc_subspecies_classification", "lib", "ref-tree-alignment");
 if os.path.exists(tree_deployed):
   ALIGNMENT_PATH = tree_deployed
