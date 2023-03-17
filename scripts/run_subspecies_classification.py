@@ -13,8 +13,8 @@ import sys
 # Determine path to our alignments.
 #
 top = os.getenv("KB_TOP")
-tree_deployed = os.path.join(top, "lib", "ref-tree-alignment");
-tree_dev = os.path.join(top, "modules", "bvbrc_subspecies_classification", "lib", "ref-tree-alignment");
+tree_deployed = os.path.join(top, "lib2", "ref-tree-alignment");
+tree_dev = os.path.join(top, "modules2", "bvbrc_subspecies_classification", "lib", "ref-tree-alignment");
 tree_local = os.path.join("/home", "ac.mkuscuog", "git", "bvbrc_subspecies_classification", "lib", "ref-tree-alignment");
 if os.path.exists(tree_deployed):
   ALIGNMENT_PATH = tree_deployed
@@ -230,7 +230,7 @@ if __name__ == "__main__" :
     if virus_type == "INFLUENZAH5" or virus_type == "SWINEH1":
       delimiter = CLADE_DELIMITER_INFLUENZAH5 if virus_type == "INFLUENZAH5" else (CLADE_DELIMITER_SWINEH1 if virus_type == "SWINEH1" else CLADE_DELIMITER)
       cladinator_cmd.insert(1, "-S=%s" %(delimiter))
-    if virus_type == "INFLUENZAH5" or virus_type == "SWINEH1" or virus_type == "SWINEH3":
+    if virus_type == "INFLUENZAH5" or virus_type == "SWINEH1" or virus_type == "SWINEH3" or virus_type == "SWINEH1US":
       cladinator_cmd.insert(1, "-m=%s" %(mapping_file))
     try:
       subprocess.check_call(cladinator_cmd, shell=False)
@@ -255,7 +255,7 @@ if __name__ == "__main__" :
             else:
               query_dict[query] = split[2] + "-like"
       
-      if virus_type == "INFLUENZAH5" or virus_type == "SWINEH1" or virus_type == "SWINEH3":
+      if virus_type == "INFLUENZAH5" or virus_type == "SWINEH1" or virus_type == "SWINEH3" or virus_type == "SWINEH1US":
         decorator_output = os.path.join(output_dir, "outtree.tre")
         decorator_cmd = ["decorator", "-f=n", "-nh", "INPUT_TRE_FILE", mapping_file, decorator_output]
       #Generate tre files for each query
@@ -277,7 +277,7 @@ if __name__ == "__main__" :
               q.write(lines[i])
 
             #Update tre file for influenza to display labels in phylogenetic tree
-            if virus_type == "INFLUENZAH5" or virus_type == "SWINEH1" or virus_type == "SWINEH3":
+            if virus_type == "INFLUENZAH5" or virus_type == "SWINEH1" or virus_type == "SWINEH3" or virus_type == "SWINEH1US":
               try:
                 decorator_cmd[3] = file_path
                 subprocess.check_call(decorator_cmd, shell=False)
