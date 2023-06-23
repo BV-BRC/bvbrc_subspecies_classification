@@ -58,7 +58,6 @@ GENOTYPER_ERROR_F_NAME = "input.fasta.err"
 
 CLADE_DELIMITER = "(.+?)\|.+"
 CLADE_DELIMITER_INFLUENZAH5 = ".+_\{(.+)\}"
-CLADE_DELIMITER_SWINEH1 = ".+\{(.+)\}"
 REPORT_DATE = "<span>Report Date:</span> %s"
 TABLE_HEADER_C = "<th class=\"dgrid-cell dgrid-cell-padding\">Query Identifier</th><th class=\"dgrid-cell dgrid-cell-padding\">Clade Classification</th><th class=\"dgrid-cell dgrid-cell-padding\">Tree Link</th>"
 TABLE_HEADER_R_RESULT = "<th class=\"dgrid-cell dgrid-cell-padding\">Input FASTA unique ID</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Segment number</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Genotype</th><th class=\"dgrid-cell dgrid-cell-padding\">Best hit accession</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:13%\">Query coverage %</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Ident %</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">E Value</th>"
@@ -227,9 +226,8 @@ if __name__ == "__main__" :
     cladinator_output = os.path.join(output_dir, CLADINATOR_OUTPUT_F_NAME)
 
     cladinator_cmd = ["cladinator", guppy_output, output_file]
-    if virus_type == "INFLUENZAH5" or virus_type == "SWINEH1":
-      delimiter = CLADE_DELIMITER_INFLUENZAH5 if virus_type == "INFLUENZAH5" else (CLADE_DELIMITER_SWINEH1 if virus_type == "SWINEH1" else CLADE_DELIMITER)
-      cladinator_cmd.insert(1, "-S=%s" %(delimiter))
+    if virus_type == "INFLUENZAH5":
+      cladinator_cmd.insert(1, "-S=%s" %(CLADE_DELIMITER_INFLUENZAH5))
     if virus_type == "INFLUENZAH5" or virus_type == "SWINEH1" or virus_type == "SWINEH3" or virus_type == "SWINEH1US":
       cladinator_cmd.insert(1, "-m=%s" %(mapping_file))
     try:
