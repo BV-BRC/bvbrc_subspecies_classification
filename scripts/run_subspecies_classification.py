@@ -262,7 +262,8 @@ if __name__ == "__main__" :
         lines = f.readlines()
         for i in range(len(lines)):
           for key in query_dict:
-            if key in lines[i]:
+            key_match = key + "_"
+            if key_match in lines[i]:
               key = re.sub("[^a-zA-Z0-9 \n\.]", "_", key) 
               if len(key) > 250:
                 print('File name is too long. Truncating it')
