@@ -64,6 +64,7 @@ TABLE_HEADER_R_RESULT = "<th class=\"dgrid-cell dgrid-cell-padding\">Input FASTA
 TABLE_HEADER_R_ERR = "<th class=\"dgrid-cell dgrid-cell-padding\">Input FASTA unique ID</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Segment number</th><th class=\"dgrid-cell dgrid-cell-padding\">Error Description</th>"
 TABLE_ROW = "<td class=\"dgrid-cell dgrid-cell-padding\">%{data}</td>"
 TREE_LINK = "<a href=\"%s/view/PhylogeneticTree2/?wsTreeFile=%s/.%s/details/%s.tre&fileType=nwk&isClassification=1&initialValue=%s\" target=\"_blank\">VIEW TREE</a>"
+BAD_CHARS = "['\"(),;:]"
 
 if __name__ == "__main__" :
   parser = argparse.ArgumentParser(description="SubSpecies Classification Script")
@@ -117,6 +118,15 @@ if __name__ == "__main__" :
   if os.path.getsize(input_file) == 0:
     print("Input fasta file is empty")
     sys.exit(-1)
+  else:
+    #Replace special chars
+    with open(input_file, 'r+') as f:
+      data = f.read()
+      data = re.sub(BAD_CHARS, "", data)
+
+      f.seek(0)
+      f.write(data)
+      f.truncate()
 
   virus_type = job_data["virus_type"]
   if virus_type == 'ROTAA':
