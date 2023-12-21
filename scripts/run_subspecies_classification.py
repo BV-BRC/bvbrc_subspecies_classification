@@ -64,6 +64,7 @@ TABLE_HEADER_R_RESULT = "<th class=\"dgrid-cell dgrid-cell-padding\">Input FASTA
 TABLE_HEADER_R_ERR = "<th class=\"dgrid-cell dgrid-cell-padding\">Input FASTA unique ID</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Segment number</th><th class=\"dgrid-cell dgrid-cell-padding\">Error Description</th>"
 TABLE_ROW = "<td class=\"dgrid-cell dgrid-cell-padding\">%{data}</td>"
 TREE_LINK = "<a href=\"%s/view/PhylogeneticTree2/?wsTreeFile=%s/.%s/details/%s.tre&fileType=nwk&isClassification=1&initialValue=%s\" target=\"_blank\">VIEW TREE</a>"
+TREE_LINK_ALL = "<a href=\"%s/view/PhylogeneticTree2/?wsTreeFile=%s/.%s/details/%s.tre&fileType=nwk&isClassification=1\" target=\"_blank\">VIEW TREE FOR ALL</a>"
 BAD_CHARS = "['\"(),;:]"
 
 if __name__ == "__main__" :
@@ -238,7 +239,9 @@ if __name__ == "__main__" :
     cladinator_cmd = ["cladinator", guppy_output, output_file]
     if virus_type == "INFLUENZAH5":
       cladinator_cmd.insert(1, "-S=%s" %(CLADE_DELIMITER_INFLUENZAH5))
-    if virus_type == "INFLUENZAH5" or virus_type == "SWINEH1" or virus_type == "SWINEH3" or virus_type == "SWINEH1US":
+
+    is_ortho = (virus_type == "INFLUENZAH5" or virus_type == "SWINEH1" or virus_type == "SWINEH3" or virus_type == "SWINEH1US")
+    if is_ortho:
       cladinator_cmd.insert(1, "-m=%s" %(mapping_file))
     try:
       subprocess.check_call(cladinator_cmd, shell=False)
@@ -263,9 +266,11 @@ if __name__ == "__main__" :
             else:
               query_dict[query] = split[2] + "-like"
       
-      if virus_type == "INFLUENZAH5" or virus_type == "SWINEH1" or virus_type == "SWINEH3" or virus_type == "SWINEH1US":
+      if is_ortho:
         decorator_output = os.path.join(output_dir, "outtree.tre")
         decorator_cmd = ["decorator", "-f=n", "-nh", "INPUT_TRE_FILE", mapping_file, decorator_output]
+
+        decorator_output_global = os.path.join(output_dir, "out.tree.tre")
       #Generate tre files for each query
       file_name_syntax = "%s.tre"
       with open(guppy_output, "r") as f:
@@ -286,11 +291,17 @@ if __name__ == "__main__" :
               q.write(lines[i])
 
             #Update tre file for influenza to display labels in phylogenetic tree
-            if virus_type == "INFLUENZAH5" or virus_type == "SWINEH1" or virus_type == "SWINEH3" or virus_type == "SWINEH1US":
+            if is_ortho:
               try:
                 decorator_cmd[3] = file_path
                 subprocess.check_call(decorator_cmd, shell=False)
                 shutil.move(decorator_output, file_path)
+
+                #Append updated data to global tre file
+                with open(file_path, "r") as query_file:
+                  with open(decorator_output_global, "a") as global_file:
+                    shutil.copyfileobj(query_file, global_file)
+                    global_file.write("\n")
               except Exception as e:
                 print("Error running decorator for %s:\n %s" %(file_name, e))
                 sys.exit(-1)
@@ -318,8 +329,9 @@ if __name__ == "__main__" :
           key = key[0:200] + '_'
         rows += TABLE_ROW.replace("%{data}", TREE_LINK %(BASE_URL, job_data["output_path"], job_data["output_file"], re.sub("[^a-zA-Z0-9 \n\.]", "_", key), initial_value))
         rows += "</tr>"
-  
+
       html_data[60] = REPORT_DATE %(datetime.now().strftime("%B %d, %Y %H:%M:%S"))
+      html_data[64] = TREE_LINK_ALL %(BASE_URL, job_data["output_path"], job_data["output_file"], "out.tree" if is_ortho else "out.sing")
       html_data[68] = TABLE_HEADER_C
       html_data[70] = rows
       with open(report_file, 'w') as f:
