@@ -122,8 +122,15 @@ if __name__ == "__main__" :
   else:
     #Replace special chars
     with open(input_file, 'r+') as f:
-      data = f.read()
-      data = re.sub(BAD_CHARS, "", data)
+      data = ""
+      for line in f:
+        if line.startswith(">"):
+          line = line.strip()
+          line = re.sub(BAD_CHARS, "", line)
+          line = re.sub(" ", "_", line)
+          line += "\n"
+
+        data += line
 
       f.seek(0)
       f.write(data)
