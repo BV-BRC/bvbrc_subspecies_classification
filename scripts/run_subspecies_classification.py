@@ -122,8 +122,15 @@ if __name__ == "__main__" :
   else:
     #Replace special chars
     with open(input_file, 'r+') as f:
-      data = f.read()
-      data = re.sub(BAD_CHARS, "", data)
+      data = ""
+      for line in f:
+        if line.startswith(">"):
+          line = line.strip()
+          line = re.sub(BAD_CHARS, "", line)
+          line = re.sub(" ", "_", line)
+          line += "\n"
+
+        data += line
 
       f.seek(0)
       f.write(data)
@@ -331,7 +338,7 @@ if __name__ == "__main__" :
         rows += "</tr>"
 
       html_data[60] = REPORT_DATE %(datetime.now().strftime("%B %d, %Y %H:%M:%S"))
-      html_data[64] = TREE_LINK_ALL %(BASE_URL, job_data["output_path"], job_data["output_file"], "out.tree" if is_ortho else "out.sing")
+      #html_data[64] = TREE_LINK_ALL %(BASE_URL, job_data["output_path"], job_data["output_file"], "out.tree" if is_ortho else "out.sing")
       html_data[68] = TABLE_HEADER_C
       html_data[70] = rows
       with open(report_file, 'w') as f:
