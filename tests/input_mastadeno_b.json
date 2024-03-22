@@ -1,0 +1,7 @@
+{
+    "input_source": "fasta_file",
+    "input_fasta_file": "/olson@patricbrc.org/PATRIC-QA/DataSets/SubspeciesClassification/Human_mastadenovirus_B_21.fasta",
+    "virus_type": "MASTADENOB",
+    "output_file": "human_masta_b",
+    "output_path": "/mkuscuog@bvbrc/home/subspecies/output"
+}

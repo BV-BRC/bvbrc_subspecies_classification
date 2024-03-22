@@ -1,0 +1,83 @@
+
+
+IMPORTANT WARNING: Sequences e and f are exactly identical
+
+
+IMPORTANT WARNING: Sequences 14 and 15 are exactly identical
+
+
+IMPORTANT WARNING: Sequences 1c and 1d are exactly identical
+
+
+IMPORTANT WARNING: Sequences 59 and 5a are exactly identical
+
+
+IMPORTANT WARNING: Sequences 5d and 5e are exactly identical
+
+IMPORTANT WARNING
+Found 5 sequences that are exactly identical to other sequences in the alignment.
+Normally they should be excluded from the analysis.
+
+Just in case you might need it, an alignment file with 
+sequence duplicates removed is printed to file Human_mastadenovirus_B_ni_mafft.reduced
+
+
+This is RAxML version 7.2.6 released by Alexandros Stamatakis in February 2010.
+
+With greatly appreciated code contributions by:
+Andre Aberer (TUM)
+Simon Berger (TUM)
+John Cazes (TACC)
+Michael Ott (TUM)
+Nick Pattengale (UNM)
+Wayne Pfeiffer (SDSC)
+
+
+Alignment has 10108 distinct alignment patterns
+
+Proportion of gaps and completely undetermined characters in this alignment: 8.15%
+
+RAxML rapid hill-climbing mode
+
+Using 1 distinct models/data partitions with joint branch length optimization
+
+
+Executing 1 inferences on the original alignment using 1 distinct randomized MP trees
+
+All free model parameters will be estimated by RAxML
+GAMMA model of rate heteorgeneity, ML estimate of alpha-parameter
+
+GAMMA Model parameters will be estimated up to an accuracy of 0.1000000000 Log Likelihood units
+
+Partition: 0
+Alignment Patterns: 10108
+Name: No Name Provided
+DataType: DNA
+Substitution Matrix: GTR
+
+
+
+
+RAxML was called as follows:
+
+../RAxML-7.2.6/raxmlHPC -m GTRGAMMA -s Human_mastadenovirus_B_ni_mafft -n Human_mastadenovirus_B_ni_mafft_gtrgamma 
+
+
+Inference[0]: Time 1400.885648 GAMMA-based likelihood -247882.951521, best rearrangement setting 5
+alpha[0]: 0.240409 rates[0] ac ag at cg ct gt: 1.485633 3.725984 1.687619 0.559853 4.505737 1.000000 
+
+
+Conducting final model optimizations on all 1 trees under GAMMA-based models ....
+
+Inference[0] final GAMMA-based Likelihood: -247879.837790 tree written to file /home/zma/JCVI/SUBSPECIES/RAxML_result.Human_mastadenovirus_B_ni_mafft_gtrgamma
+
+
+Starting final GAMMA-based thorough Optimization on tree 0 likelihood -247879.837790 .... 
+
+Final GAMMA-based Score of best tree -247879.837786
+
+Program execution info written to /home/zma/JCVI/SUBSPECIES/RAxML_info.Human_mastadenovirus_B_ni_mafft_gtrgamma
+Best-scoring ML tree written to: /home/zma/JCVI/SUBSPECIES/RAxML_bestTree.Human_mastadenovirus_B_ni_mafft_gtrgamma
+
+Overall execution time: 2399.096149 secs or 0.666416 hours or 0.027767 days
+
