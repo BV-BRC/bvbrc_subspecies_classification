@@ -1,0 +1,61 @@
+
+
+This is RAxML version 7.2.6 released by Alexandros Stamatakis in February 2010.
+
+With greatly appreciated code contributions by:
+Andre Aberer (TUM)
+Simon Berger (TUM)
+John Cazes (TACC)
+Michael Ott (TUM)
+Nick Pattengale (UNM)
+Wayne Pfeiffer (SDSC)
+
+
+Alignment has 2060 distinct alignment patterns
+
+Proportion of gaps and completely undetermined characters in this alignment: 5.60%
+
+RAxML rapid hill-climbing mode
+
+Using 1 distinct models/data partitions with joint branch length optimization
+
+
+Executing 1 inferences on the original alignment using 1 distinct randomized MP trees
+
+All free model parameters will be estimated by RAxML
+GAMMA model of rate heteorgeneity, ML estimate of alpha-parameter
+
+GAMMA Model parameters will be estimated up to an accuracy of 0.1000000000 Log Likelihood units
+
+Partition: 0
+Alignment Patterns: 2060
+Name: No Name Provided
+DataType: DNA
+Substitution Matrix: GTR
+
+
+
+
+RAxML was called as follows:
+
+../RAxML-7.2.6/raxmlHPC -m GTRGAMMA -s Measles_morbillivirus_ni_mafft -n Measles_morbillivirus_ni_mafft_gtrgamma 
+
+
+Inference[0]: Time 111.863869 GAMMA-based likelihood -59326.812227, best rearrangement setting 5
+alpha[0]: 0.428317 rates[0] ac ag at cg ct gt: 0.953192 6.757952 0.485758 0.393901 9.986923 1.000000 
+
+
+Conducting final model optimizations on all 1 trees under GAMMA-based models ....
+
+Inference[0] final GAMMA-based Likelihood: -59320.649327 tree written to file /home/zma/JCVI/SUBSPECIES/RAxML_result.Measles_morbillivirus_ni_mafft_gtrgamma
+
+
+Starting final GAMMA-based thorough Optimization on tree 0 likelihood -59320.649327 .... 
+
+Final GAMMA-based Score of best tree -59320.649327
+
+Program execution info written to /home/zma/JCVI/SUBSPECIES/RAxML_info.Measles_morbillivirus_ni_mafft_gtrgamma
+Best-scoring ML tree written to: /home/zma/JCVI/SUBSPECIES/RAxML_bestTree.Measles_morbillivirus_ni_mafft_gtrgamma
+
+Overall execution time: 208.562663 secs or 0.057934 hours or 0.002414 days
+

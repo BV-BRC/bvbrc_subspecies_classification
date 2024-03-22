@@ -243,13 +243,19 @@ if __name__ == "__main__" :
     guppy_output = os.path.join(output_dir, GUPPY_OUTPUT_F_NAME)
     cladinator_output = os.path.join(output_dir, CLADINATOR_OUTPUT_F_NAME)
 
-    cladinator_cmd = ["cladinator", guppy_output, output_file]
-    if virus_type == "INFLUENZAH5":
-      cladinator_cmd.insert(1, "-S=%s" %(CLADE_DELIMITER_INFLUENZAH5))
+    cladinator_cmd = ["cladinator", guppy_output, cladinator_output]
 
     is_ortho = (virus_type == "INFLUENZAH5" or virus_type == "SWINEH1" or virus_type == "SWINEH3" or virus_type == "SWINEH1US")
-    if is_ortho:
+    is_adeno = (virus_type == "MASTADENOA" or virus_type == "MASTADENOB" or virus_type == "MASTADENOC" or virus_type == "MASTADENOE" or virus_type == "MASTADENOF")
+    is_paramyxo = (virus_type == "MEASLES" or virus_type == "MUMPS")
+
+    if virus_type == "INFLUENZAH5":
+      cladinator_cmd.insert(1, "-S=%s" %(CLADE_DELIMITER_INFLUENZAH5))
+    if is_ortho or is_adeno or is_paramyxo:
       cladinator_cmd.insert(1, "-m=%s" %(mapping_file))
+    if is_adeno or is_paramyxo:
+      cladinator_cmd.insert(1, "-x")
+
     try:
       subprocess.check_call(cladinator_cmd, shell=False)
     except Exception as e:
@@ -259,7 +265,7 @@ if __name__ == "__main__" :
     try:
       #Generate query dictionary to match with tre files in next step
       query_dict = {}
-      with open(output_file, "r") as f:
+      with open(cladinator_output, "r") as f:
         next(f) 
         for line in f:
           split = line.split('\t')
@@ -273,7 +279,7 @@ if __name__ == "__main__" :
             else:
               query_dict[query] = split[2] + "-like"
       
-      if is_ortho:
+      if is_ortho or is_adeno or is_paramyxo:
         decorator_output = os.path.join(output_dir, "outtree.tre")
         decorator_cmd = ["decorator", "-f=n", "-nh", "INPUT_TRE_FILE", mapping_file, decorator_output]
 
@@ -297,8 +303,8 @@ if __name__ == "__main__" :
             with open(file_path, "w") as q:
               q.write(lines[i])
 
-            #Update tre file for influenza to display labels in phylogenetic tree
-            if is_ortho:
+            #Decorate tre file to display labels in phylogenetic tree
+            if is_ortho or is_adeno or is_paramyxo:
               try:
                 decorator_cmd[3] = file_path
                 subprocess.check_call(decorator_cmd, shell=False)
