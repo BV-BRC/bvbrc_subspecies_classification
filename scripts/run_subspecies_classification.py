@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
 import argparse
 from datetime import datetime
 import json
@@ -80,7 +81,7 @@ if __name__ == "__main__" :
     with open(args.jfile, "r") as j:
       job_data = json.load(j)
   except Exception as e:
-    print("Error in opening job file:\n %s" %(e))
+    print("Error in opening job file:\n %s" %(e), file=sys.stderr)
     sys.exit(-1)
 
   if not job_data:
@@ -105,7 +106,7 @@ if __name__ == "__main__" :
       fetch_fasta_cmd = ["p3-cp", "ws:%s" %(job_data["input_fasta_file"]), input_file]
       subprocess.check_call(fetch_fasta_cmd, shell=False)
     except Exception as e:
-      print("Error copying fasta file from workspace:\n %s" %(e))
+      print("Error copying fasta file from workspace:\n %s" %(e), file=sys.stderr)
       sys.exit(-1)
   elif job_data["input_source"] == "fasta_data":
     #Copy user data to input file
@@ -113,7 +114,7 @@ if __name__ == "__main__" :
       with open(input_file, "w+") as input:
         input.write(job_data["input_fasta_data"])
     except Exception as e:
-      print("Error copying fasta data to input file:\n %s" %(e))
+      print("Error copying fasta data to input file:\n %s" %(e), file=sys.stderr)
       sys.exit(-1)
 
   if os.path.getsize(input_file) == 0:
@@ -180,7 +181,7 @@ if __name__ == "__main__" :
       with open(report_file, 'w') as f:
         f.writelines(html_data)
     except Exception as e:
-      print("Error running rotavirus a genotyper:\n %s" %(e))
+      print("Error running rotavirus a genotyper:\n %s" %(e), file=sys.stderr)
       sys.exit(-1)
   else:
     #Find reference paths for the virus type
@@ -209,7 +210,7 @@ if __name__ == "__main__" :
         fetch_msa_cmd = ["p3-cp", "ws:%s" %(job_data["ref_msa_fasta"]), reference_mfa_file]
         subprocess.check_call(fetch_msa_cmd, shell=False)
       except Exception as e:
-        print("Error copying mfa fasta file from workspace:\n %s" %(e))
+        print("Error copying mfa fasta file from workspace:\n %s" %(e), file=sys.stderr)
         sys.exit(-1)
         
     #Aligning of the query sequence(s) to the reference multiple sequence alignment
@@ -219,7 +220,7 @@ if __name__ == "__main__" :
       with open(mafft_output, "w+") as o:
         subprocess.check_call(mafft_cmd, shell=False, stdout=o)
     except Exception as e:
-      print("Error running mafft:\n %s" %(e))
+      print("Error running mafft:\n %s" %(e), file=sys.stderr)
       sys.exit(-1)
   
     #Pplacer
@@ -228,7 +229,7 @@ if __name__ == "__main__" :
     try:
       subprocess.check_call(pplacer_cmd, shell=False)
     except Exception as e:
-      print("Error running pplacer:\n %s" %(e))
+      print("Error running pplacer:\n %s" %(e), file=sys.stderr)
       sys.exit(-1)
   
     #Guppy to generate a tree for every query sequence
@@ -236,7 +237,7 @@ if __name__ == "__main__" :
     try:
       subprocess.check_call(guppy_cmd, shell=False)
     except Exception as e:
-      print("Error running guppy:\n %s" %(e))
+      print("Error running guppy:\n %s" %(e), file=sys.stderr)
       sys.exit(-1)
   
     #Cladinator
@@ -259,7 +260,7 @@ if __name__ == "__main__" :
     try:
       subprocess.check_call(cladinator_cmd, shell=False)
     except Exception as e:
-      print("Error running cladinator:\n %s" %(e))
+      print("Error running cladinator:\n %s" %(e), file=sys.stderr)
       sys.exit(-1)
  
     try:
@@ -319,7 +320,7 @@ if __name__ == "__main__" :
                     shutil.copyfileobj(query_file, global_file)
                     global_file.write("\n")
               except Exception as e:
-                print("Error running decorator for %s:\n %s" %(file_name, e))
+                print("Error running decorator for %s:\n %s" %(file_name, e), file=sys.stderr)
                 sys.exit(-1)
   
       #Create summary file
@@ -358,7 +359,7 @@ if __name__ == "__main__" :
       #Remove initial result 
       #os.remove(output_file)
     except Exception as e:
-      print("Error generating result files:\n %s" %(e))
+      print("Error generating result files:\n %s" %(e), file=sys.stderr)
       sys.exit(-1)
 
   try:
@@ -372,5 +373,5 @@ if __name__ == "__main__" :
       if not f.endswith("html"):
         shutil.move(os.path.join(output_dir, f), details_folder)
   except Exception as e:
-    print("Error moving data files to details folder:\n %s" %(e))
+    print("Error moving data files to details folder:\n %s" %(e), file=sys.stderr)
     sys.exit(-1)
