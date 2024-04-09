@@ -63,7 +63,7 @@ TABLE_HEADER_C = "<th class=\"dgrid-cell dgrid-cell-padding\">Query Identifier</
 TABLE_HEADER_R_RESULT = "<th class=\"dgrid-cell dgrid-cell-padding\">Input FASTA unique ID</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Segment number</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Genotype</th><th class=\"dgrid-cell dgrid-cell-padding\">Best hit accession</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:13%\">Query coverage %</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Ident %</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">E Value</th>"
 TABLE_HEADER_R_ERR = "<th class=\"dgrid-cell dgrid-cell-padding\">Input FASTA unique ID</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Segment number</th><th class=\"dgrid-cell dgrid-cell-padding\">Error Description</th>"
 TABLE_ROW = "<td class=\"dgrid-cell dgrid-cell-padding\">%{data}</td>"
-TREE_LINK = "<a href=\"%s/view/PhylogeneticTree2/?wsTreeFile=%s/.%s/details/%s.tre&fileType=nwk&isClassification=1&initialValue=%s\" target=\"_blank\">VIEW TREE</a>"
+TREE_LINK = "<a href=\"%s/view/PhylogeneticTree2/?wsTreeFile=%s/.%s/details/%s&fileType=nwk&isClassification=1&initialValue=%s\" target=\"_blank\">VIEW TREE</a>"
 TREE_LINK_ALL = "<a href=\"%s/view/PhylogeneticTree2/?wsTreeFile=%s/.%s/details/%s.tre&fileType=nwk&isClassification=1\" target=\"_blank\">VIEW TREE FOR ALL</a>"
 BAD_CHARS = "['\"(),;:]"
 
@@ -286,17 +286,20 @@ if __name__ == "__main__" :
         decorator_output_global = os.path.join(output_dir, "out.tree.tre")
       #Generate tre files for each query
       file_name_syntax = "%s.tre"
+      id_file_map = {}
       with open(guppy_output, "r") as f:
         lines = f.readlines()
         for i in range(len(lines)):
           for key in query_dict:
             key_match = key + "_"
             if key_match in lines[i]:
+              org_key = key
               key = re.sub("[^a-zA-Z0-9 \n\.]", "_", key) 
               if len(key) > 250:
                 print('File name is too long. Truncating it')
                 key = key[0:200] + '_'
               file_name = file_name_syntax %(key)
+              id_file_map[org_key] = file_name
               break
           if "file_name" in dir():
             file_path = os.path.join(output_dir, file_name)
@@ -333,6 +336,8 @@ if __name__ == "__main__" :
   
       rows = ""
       for key, value in query_dict.iteritems():
+        file_name = id_file_map[key]
+        key = unicode(key, 'utf-8')
         rows += "<tr>"
         rows += TABLE_ROW.replace("%{data}", key)
         rows += TABLE_ROW.replace("%{data}", value)
@@ -340,13 +345,13 @@ if __name__ == "__main__" :
         #TODO: handle file name truncating in a function during dict creation
         if len(key) > 250:
           key = key[0:200] + '_'
-        rows += TABLE_ROW.replace("%{data}", TREE_LINK %(BASE_URL, job_data["output_path"], job_data["output_file"], re.sub("[^a-zA-Z0-9 \n\.]", "_", key), initial_value))
+        rows += TABLE_ROW.replace("%{data}", TREE_LINK %(BASE_URL, job_data["output_path"], job_data["output_file"], file_name, initial_value))
         rows += "</tr>"
 
       html_data[60] = REPORT_DATE %(datetime.now().strftime("%B %d, %Y %H:%M:%S"))
       #html_data[64] = TREE_LINK_ALL %(BASE_URL, job_data["output_path"], job_data["output_file"], "out.tree" if is_ortho else "out.sing")
       html_data[68] = TABLE_HEADER_C
-      html_data[70] = rows
+      html_data[70] = rows.encode('utf-8')
       with open(report_file, 'w') as f:
         f.writelines(html_data)
   
