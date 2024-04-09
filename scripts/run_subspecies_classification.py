@@ -8,6 +8,7 @@ import os
 import shutil
 import subprocess
 import sys
+import traceback
 
 #
 # Determine path to our alignments.
@@ -81,6 +82,7 @@ if __name__ == "__main__" :
       job_data = json.load(j)
   except Exception as e:
     print("Error in opening job file:\n %s" %(e))
+    traceback.print_exc(file=sys.stderr)
     sys.exit(-1)
 
   if not job_data:
@@ -106,6 +108,7 @@ if __name__ == "__main__" :
       subprocess.check_call(fetch_fasta_cmd, shell=False)
     except Exception as e:
       print("Error copying fasta file from workspace:\n %s" %(e))
+      traceback.print_exc(file=sys.stderr)
       sys.exit(-1)
   elif job_data["input_source"] == "fasta_data":
     #Copy user data to input file
@@ -114,6 +117,7 @@ if __name__ == "__main__" :
         input.write(job_data["input_fasta_data"])
     except Exception as e:
       print("Error copying fasta data to input file:\n %s" %(e))
+      traceback.print_exc(file=sys.stderr)
       sys.exit(-1)
 
   if os.path.getsize(input_file) == 0:
@@ -181,6 +185,7 @@ if __name__ == "__main__" :
         f.writelines(html_data)
     except Exception as e:
       print("Error running rotavirus a genotyper:\n %s" %(e))
+      traceback.print_exc(file=sys.stderr)
       sys.exit(-1)
   else:
     #Find reference paths for the virus type
@@ -210,6 +215,7 @@ if __name__ == "__main__" :
         subprocess.check_call(fetch_msa_cmd, shell=False)
       except Exception as e:
         print("Error copying mfa fasta file from workspace:\n %s" %(e))
+        traceback.print_exc(file=sys.stderr)
         sys.exit(-1)
         
     #Aligning of the query sequence(s) to the reference multiple sequence alignment
@@ -220,6 +226,7 @@ if __name__ == "__main__" :
         subprocess.check_call(mafft_cmd, shell=False, stdout=o)
     except Exception as e:
       print("Error running mafft:\n %s" %(e))
+      traceback.print_exc(file=sys.stderr)
       sys.exit(-1)
   
     #Pplacer
@@ -229,6 +236,7 @@ if __name__ == "__main__" :
       subprocess.check_call(pplacer_cmd, shell=False)
     except Exception as e:
       print("Error running pplacer:\n %s" %(e))
+      traceback.print_exc(file=sys.stderr)
       sys.exit(-1)
   
     #Guppy to generate a tree for every query sequence
@@ -237,6 +245,7 @@ if __name__ == "__main__" :
       subprocess.check_call(guppy_cmd, shell=False)
     except Exception as e:
       print("Error running guppy:\n %s" %(e))
+      traceback.print_exc(file=sys.stderr)
       sys.exit(-1)
   
     #Cladinator
@@ -260,6 +269,7 @@ if __name__ == "__main__" :
       subprocess.check_call(cladinator_cmd, shell=False)
     except Exception as e:
       print("Error running cladinator:\n %s" %(e))
+      traceback.print_exc(file=sys.stderr)
       sys.exit(-1)
  
     try:
@@ -320,6 +330,7 @@ if __name__ == "__main__" :
                     global_file.write("\n")
               except Exception as e:
                 print("Error running decorator for %s:\n %s" %(file_name, e))
+                traceback.print_exc(file=sys.stderr)
                 sys.exit(-1)
   
       #Create summary file
@@ -359,6 +370,7 @@ if __name__ == "__main__" :
       #os.remove(output_file)
     except Exception as e:
       print("Error generating result files:\n %s" %(e))
+      traceback.print_exc(file=sys.stderr)
       sys.exit(-1)
 
   try:
@@ -373,4 +385,5 @@ if __name__ == "__main__" :
         shutil.move(os.path.join(output_dir, f), details_folder)
   except Exception as e:
     print("Error moving data files to details folder:\n %s" %(e))
+    traceback.print_exc(file=sys.stderr)
     sys.exit(-1)
