@@ -66,7 +66,7 @@ TABLE_HEADER_R_ERR = "<th class=\"dgrid-cell dgrid-cell-padding\">Input FASTA un
 TABLE_ROW = "<td class=\"dgrid-cell dgrid-cell-padding\">%{data}</td>"
 TREE_LINK = "<a href=\"%s/view/PhylogeneticTree2/?wsTreeFile=%s/.%s/details/%s&fileType=nwk&isClassification=1&initialValue=%s\" target=\"_blank\">VIEW TREE</a>"
 TREE_LINK_ALL = "<a href=\"%s/view/PhylogeneticTree2/?wsTreeFile=%s/.%s/details/%s.tre&fileType=nwk&isClassification=1\" target=\"_blank\">VIEW TREE FOR ALL</a>"
-BAD_CHARS = "['\"(),;:]"
+BAD_CHARS = "[\['\"(),;:\]]"
 
 if __name__ == "__main__" :
   parser = argparse.ArgumentParser(description="SubSpecies Classification Script")
