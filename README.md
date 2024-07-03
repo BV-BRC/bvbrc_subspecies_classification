@@ -14,7 +14,7 @@ There is one application service specification defined here:
 
 1. [Subspecies Classification](app_specs/SubspeciesClassification.md): The Subspecies Classification tool assigns the genotype/subtype of a virus, based on the genotype/subtype assignments maintained by the International Committee on Taxonomy of Viruses (ICTV).
 
-The code in this module provides the BV-BRC application service wrapper scripts for the genome annotation service as well
+The code in this module provides the BV-BRC application service wrapper scripts for the subspecies classification service as well
 as some backend utilities:
 
 | Script name | Purpose |
