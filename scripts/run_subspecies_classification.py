@@ -280,7 +280,7 @@ if __name__ == "__main__" :
         for line in f:
           split = line.split('\t')
           query = split[0]
-          if split[1] == "Matching Clades" and (not query_dict.has_key(query) or query_dict[query] == "?"):
+          if split[1] == "Matching Clades" and (query not in query_dict or query_dict[query] == "?"):
             query_dict[query] = split[2]
           elif split[1] == "Matching Down-tree Bracketing Clades" and query_dict[query] == "?":
             #Use down-tree classification value if matching clade is ?
@@ -337,7 +337,7 @@ if __name__ == "__main__" :
       result_file = os.path.join(output_dir, "result.tsv")
       with open(result_file, "w") as s:
         s.write("Query Identifier\tClade Classification\n")
-        for key, value in query_dict.iteritems():
+        for key, value in query_dict.items():
           s.write(key + "\t" + value + "\n")
   
       #Create html summary file
@@ -346,9 +346,9 @@ if __name__ == "__main__" :
         html_data = f.readlines()
   
       rows = ""
-      for key, value in query_dict.iteritems():
+      for key, value in query_dict.items():
         file_name = id_file_map[key]
-        key = unicode(key, 'utf-8')
+        key = str(key, 'utf-8')
         rows += "<tr>"
         rows += TABLE_ROW.replace("%{data}", key)
         rows += TABLE_ROW.replace("%{data}", value)
