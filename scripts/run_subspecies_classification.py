@@ -348,7 +348,6 @@ if __name__ == "__main__" :
       rows = ""
       for key, value in query_dict.items():
         file_name = id_file_map[key]
-        key = str(key, 'utf-8')
         rows += "<tr>"
         rows += TABLE_ROW.replace("%{data}", key)
         rows += TABLE_ROW.replace("%{data}", value)
@@ -362,7 +361,7 @@ if __name__ == "__main__" :
       html_data[60] = REPORT_DATE %(datetime.now().strftime("%B %d, %Y %H:%M:%S"))
       #html_data[64] = TREE_LINK_ALL %(BASE_URL, job_data["output_path"], job_data["output_file"], "out.tree" if is_ortho else "out.sing")
       html_data[68] = TABLE_HEADER_C
-      html_data[70] = rows.encode('utf-8')
+      html_data[70] = rows
       with open(report_file, 'w') as f:
         f.writelines(html_data)
   
