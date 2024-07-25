@@ -73,7 +73,7 @@ deploy-config:
 	    ln -s $(DEPLOY_RUNTIME)/bin/$$tool $$tpath; \
 	done
 	rm -rf $(TARGET)/lib/rota-a-genotyper/VIGOR3/prod3/vigorscratch
-	ln -s /disks/tmp $(TARGET)/lib/rota-a-genotyper/VIGOR3/prod3/vigorscratch
+	ln -s /tmp $(TARGET)/lib/rota-a-genotyper/VIGOR3/prod3/vigorscratch
 
 deploy-service: deploy-libs deploy-scripts deploy-service-scripts deploy-specs
 
