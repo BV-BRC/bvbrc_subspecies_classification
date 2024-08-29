@@ -7,7 +7,7 @@ path.to.blastall = [% kb_runtime %]/bin/blastall
 
 #path to temp directory to use to store temp files needed to run VIGOR
 #if directory does not exist, it will be created
-path.to.tempDir = /disks/tmp
+path.to.tempDir = /tmp
 
 #path to VIGOR3.pl
 path.to.vigor = [% module_lib %]/rota-a-genotyper/VIGOR3/prod3/VIGOR3.pl

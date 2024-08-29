@@ -7865,7 +7865,7 @@ sub align_pep_to_reference {
 #if ( getlogin() eq "jhoover" ) { print ">$tmppepid\n$tmppepseq\n>$tmprefid\n$refseq\n" }
     close TMP;
 
-    my $cmd = "$myBin/clustalw -align -GAPOPEN=6.0 -GAPEXT=0.3 -infile=$vigorspace/tmp_align_fasta &> $vigorspace/tmp_align_fasta.log";
+    my $cmd = "$myBin/clustalw -align -GAPOPEN=6.0 -GAPEXT=0.3 -infile=$vigorspace/tmp_align_fasta > $vigorspace/tmp_align_fasta.log 2>&1";
 
 #"muscle -in $vigorspace/tmp_align_fasta -out $vigorspace/tmp_align_fasta.aln -clwstrict &> $vigorspace/tmp_align_fasta.log";
     &runCmd($vigorspace, $cmd);
