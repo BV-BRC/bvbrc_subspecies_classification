@@ -59,6 +59,7 @@ GENOTYPER_ERROR_F_NAME = "input.fasta.err"
 
 CLADE_DELIMITER = "(.+?)\|.+"
 CLADE_DELIMITER_INFLUENZAH5 = ".+_\{(.+)\}"
+CLADE_DELIMITER_MPOX = "([A-Za-z0-9.]+)\|.+"
 REPORT_DATE = "<span>Report Date:</span> %s"
 TABLE_HEADER_C = "<th class=\"dgrid-cell dgrid-cell-padding\">Query Identifier</th><th class=\"dgrid-cell dgrid-cell-padding\">Clade Classification</th><th class=\"dgrid-cell dgrid-cell-padding\">Tree Link</th>"
 TABLE_HEADER_R_RESULT = "<th class=\"dgrid-cell dgrid-cell-padding\">Input FASTA unique ID</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Segment number</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Genotype</th><th class=\"dgrid-cell dgrid-cell-padding\">Best hit accession</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:13%\">Query coverage %</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Ident %</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">E Value</th>"
@@ -66,7 +67,7 @@ TABLE_HEADER_R_ERR = "<th class=\"dgrid-cell dgrid-cell-padding\">Input FASTA un
 TABLE_ROW = "<td class=\"dgrid-cell dgrid-cell-padding\">%{data}</td>"
 TREE_LINK = "<a href=\"%s/view/PhylogeneticTree2/?wsTreeFile=%s/.%s/details/%s&fileType=nwk&isClassification=1&initialValue=%s\" target=\"_blank\">VIEW TREE</a>"
 TREE_LINK_ALL = "<a href=\"%s/view/PhylogeneticTree2/?wsTreeFile=%s/.%s/details/%s.tre&fileType=nwk&isClassification=1\" target=\"_blank\">VIEW TREE FOR ALL</a>"
-BAD_CHARS = "[\['\"(),;:\]]"
+BAD_CHARS = "[\['\"(),;|:\]]"
 
 if __name__ == "__main__" :
   parser = argparse.ArgumentParser(description="SubSpecies Classification Script")
@@ -257,10 +258,13 @@ if __name__ == "__main__" :
     is_ortho = (virus_type == "INFLUENZAH5" or virus_type == "SWINEH1" or virus_type == "SWINEH3" or virus_type == "SWINEH1US")
     is_adeno = (virus_type == "MASTADENOA" or virus_type == "MASTADENOB" or virus_type == "MASTADENOC" or virus_type == "MASTADENOE" or virus_type == "MASTADENOF")
     is_paramyxo = (virus_type == "MEASLES" or virus_type == "MUMPS")
+    is_pox = (virus_type == "MPOX")
 
     if virus_type == "INFLUENZAH5":
       cladinator_cmd.insert(1, "-S=%s" %(CLADE_DELIMITER_INFLUENZAH5))
-    if is_ortho or is_adeno or is_paramyxo:
+    if virus_type == "MPOX":
+      cladinator_cmd.insert(1, "-S=%s" %(CLADE_DELIMITER_MPOX))
+    if is_ortho or is_adeno or is_paramyxo or is_pox:
       cladinator_cmd.insert(1, "-m=%s" %(mapping_file))
     if is_adeno or is_paramyxo:
       cladinator_cmd.insert(1, "-x")
@@ -289,7 +293,7 @@ if __name__ == "__main__" :
             else:
               query_dict[query] = split[2] + "-like"
       
-      if is_ortho or is_adeno or is_paramyxo:
+      if is_ortho or is_adeno or is_paramyxo or is_pox:
         decorator_output = os.path.join(output_dir, "outtree.tre")
         decorator_cmd = ["decorator", "-f=n", "-nh", "INPUT_TRE_FILE", mapping_file, decorator_output]
 
@@ -317,7 +321,7 @@ if __name__ == "__main__" :
               q.write(lines[i])
 
             #Decorate tre file to display labels in phylogenetic tree
-            if is_ortho or is_adeno or is_paramyxo:
+            if is_ortho or is_adeno or is_paramyxo or is_pox:
               try:
                 decorator_cmd[3] = file_path
                 subprocess.check_call(decorator_cmd, shell=False)
