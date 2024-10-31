@@ -57,9 +57,10 @@ CLADINATOR_OUTPUT_F_NAME = "cladinator_results.tsv"
 GENOTYPER_RESULT_F_NAME = "input.fasta.result"
 GENOTYPER_ERROR_F_NAME = "input.fasta.err"
 
-CLADE_DELIMITER = "(.+?)\|.+"
+CLADE_DELIMITER = "([A-Za-z0-9._]+)\|.+"
 CLADE_DELIMITER_INFLUENZAH5 = ".+_\{(.+)\}"
 CLADE_DELIMITER_MPOX = "([A-Za-z0-9.]+)\|.+"
+CLADE_DELIMITER_DENGUE = "(\d+).+"
 REPORT_DATE = "<span>Report Date:</span> %s"
 TABLE_HEADER_C = "<th class=\"dgrid-cell dgrid-cell-padding\">Query Identifier</th><th class=\"dgrid-cell dgrid-cell-padding\">Clade Classification</th><th class=\"dgrid-cell dgrid-cell-padding\">Tree Link</th>"
 TABLE_HEADER_R_RESULT = "<th class=\"dgrid-cell dgrid-cell-padding\">Input FASTA unique ID</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Segment number</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Genotype</th><th class=\"dgrid-cell dgrid-cell-padding\">Best hit accession</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:13%\">Query coverage %</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">Ident %</th><th class=\"dgrid-cell dgrid-cell-padding\" style=\"width:10%\">E Value</th>"
@@ -232,7 +233,7 @@ if __name__ == "__main__" :
   
     #Pplacer
     pplacer_output = os.path.join(output_dir, PPLACER_OUTPUT_F_NAME)
-    pplacer_cmd = ["pplacer", "-m", "GTR", "-t", reference_tree_file, "-s", stats_file, mafft_output, "-o", pplacer_output] 
+    pplacer_cmd = ["pplacer", "-m", "GTR", "-t", reference_tree_file, "-s", stats_file, mafft_output, "-o", pplacer_output]
     try:
       subprocess.check_call(pplacer_cmd, shell=False)
     except Exception as e:
@@ -262,8 +263,15 @@ if __name__ == "__main__" :
 
     if virus_type == "INFLUENZAH5":
       cladinator_cmd.insert(1, "-S=%s" %(CLADE_DELIMITER_INFLUENZAH5))
-    if virus_type == "MPOX":
+    elif virus_type == "MPOX":
       cladinator_cmd.insert(1, "-S=%s" %(CLADE_DELIMITER_MPOX))
+    elif virus_type == "DENGUE":
+      cladinator_cmd.insert(1, "-S=%s" %(CLADE_DELIMITER_DENGUE))
+    elif virus_type == "MASTADENOB":
+      pass
+    else:
+      cladinator_cmd.insert(1, "-S=%s" %(CLADE_DELIMITER))
+
     if is_ortho or is_adeno or is_paramyxo or is_pox:
       cladinator_cmd.insert(1, "-m=%s" %(mapping_file))
     if is_adeno or is_paramyxo:
