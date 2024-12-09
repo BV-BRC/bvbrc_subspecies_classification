@@ -1,0 +1,7 @@
+{
+  "virus_type": "STLOUIS",
+  "input_fasta_file": "/olson@patricbrc.org/PATRIC-QA/DataSets/SubspeciesClassification/stlouisenvephalitis_test.fasta",
+  "input_source": "fasta_file",
+  "output_path": "/mkuscuog@bvbrc/home/test_plans",
+  "output_file": "stlouisenvephalitis_test"
+}

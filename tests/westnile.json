@@ -1,0 +1,8 @@
+{
+  "virus_type": "WESTNILE",
+  "input_fasta_file": "/olson@patricbrc.org/PATRIC-QA/DataSets/SubspeciesClassification/westnile_test.fasta",
+  "input_source": "fasta_file",
+  "output_path": "/mkuscuog@bvbrc/home/test_plans",
+  "output_file": "westnile_test"
+}
+

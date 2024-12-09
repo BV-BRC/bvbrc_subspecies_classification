@@ -58,6 +58,9 @@ GENOTYPER_RESULT_F_NAME = "input.fasta.result"
 GENOTYPER_ERROR_F_NAME = "input.fasta.err"
 
 CLADE_DELIMITER = "([A-Za-z0-9._]+)\|.+"
+# Add CLADE_DELIMITER for these virus types only
+CLADE_DELIMITER_VIRUS_TYPES = ['BOVDIARRHEA1', 'HCV', 'JAPENCEPH', 'MURRAY', 'TKBENCEPH', 'YELLOWFEVER', 'ZIKA', 'STLOUIS', 'WESTNILE']
+
 CLADE_DELIMITER_INFLUENZAH5 = ".+_\{(.+)\}"
 CLADE_DELIMITER_MPOX = "([A-Za-z0-9.]+)\|.+"
 CLADE_DELIMITER_DENGUE = "(\d+).+"
@@ -267,9 +270,7 @@ if __name__ == "__main__" :
       cladinator_cmd.insert(1, "-S=%s" %(CLADE_DELIMITER_MPOX))
     elif virus_type == "DENGUE":
       cladinator_cmd.insert(1, "-S=%s" %(CLADE_DELIMITER_DENGUE))
-    elif virus_type == "MASTADENOB":
-      pass
-    else:
+    elif virus_type in CLADE_DELIMITER_VIRUS_TYPES:
       cladinator_cmd.insert(1, "-S=%s" %(CLADE_DELIMITER))
 
     if is_ortho or is_adeno or is_paramyxo or is_pox:
