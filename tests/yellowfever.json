@@ -1,0 +1,8 @@
+{
+  "virus_type": "YELLOWFEVER",
+  "input_fasta_file": "/olson@patricbrc.org/PATRIC-QA/DataSets/SubspeciesClassification/Yellowfever_test.fasta",
+  "input_source": "fasta_file",
+  "output_path": "/mkuscuog@bvbrc/home/test_plans",
+  "output_file": "Yellowfever_test"
+}
+

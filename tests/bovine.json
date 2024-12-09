@@ -1,0 +1,7 @@
+{
+  "virus_type": "BOVDIARRHEA1",
+  "input_source": "fasta_file",
+  "input_fasta_file": "/olson@patricbrc.org/PATRIC-QA/DataSets/SubspeciesClassification/Bovineviraldiarrhea_test.fasta",
+  "output_path": "/mkuscuog@bvbrc/home/test_plans",
+  "output_file": "Bovineviraldiarrhea_test"
+}

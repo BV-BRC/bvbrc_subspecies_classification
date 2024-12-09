@@ -1,0 +1,8 @@
+{
+  "virus_type": "HCV",
+  "input_fasta_file": "/olson@patricbrc.org/PATRIC-QA/DataSets/SubspeciesClassification/HCV_ICTV_test.fasta",
+  "input_source": "fasta_file",
+  "output_path": "/mkuscuog@bvbrc/home/test_plans",
+  "output_file": "HCV_ICTV_test"
+}
+
