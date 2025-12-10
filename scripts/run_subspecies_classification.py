@@ -280,7 +280,7 @@ class SubspeciesClassification:
 
         # Step 6: Run cladinator with correct options
         cladinator_output = self.output_dir / CLADINATOR_OUTPUT_F_NAME
-        cladinator_cmd = ["cladinator", str(guppy_output), str(cladinator_output)]
+        cladinator_cmd = ["cladinator3", str(guppy_output), str(cladinator_output)]
 
         is_ortho = self.virus_type in ["INFLUENZAH5", "SWINEH1", "SWINEH3", "SWINEH1US"]
         is_adeno = self.virus_type in ["MASTADENOA", "MASTADENOB", "MASTADENOC", "MASTADENOE", "MASTADENOF"]
@@ -309,25 +309,25 @@ class SubspeciesClassification:
             sys.exit(-1)
 
         # Step 7: Parse cladinator output to locate and name individual .tre files later
+        # "#Tree # \t Query \t Assignment \t Confidence \t Brackets \t Conclusion \t Placement count"
+        # We extract "Query" and "Assignment" columns by name
         query_dict = {}
         with cladinator_output.open() as f:
-            next(f)  # skip header
+            header = f.readline().strip().split("\t")
+            if "Query" not in header or "Assignment" not in header:
+                raise ValueError("Unexpected cladinator output format: missing Query/Assignment columns")
+
+            q_idx = header.index("Query")
+            a_idx = header.index("Assignment")
+
             for line in f:
                 parts = line.strip().split("\t")
-                if len(parts) < 3:
+                if len(parts) <= max(q_idx, a_idx):
                     continue  # Skip malformed lines
 
-                query = parts[0]
-                category = parts[1]
-                value = parts[2]
-
-                if category == "Matching Clades" and (query not in query_dict or query_dict[query] == "?"):
-                    query_dict[query] = value
-                elif category == "Matching Down-tree Bracketing Clades" and query_dict.get(query) == "?":
-                    query_dict[query] = (
-                        "Sequence cannot be classified based on the reference tree" if value == "?"
-                        else f"{value}-like"
-                    )
+                query = parts[q_idx].strip()
+                assignment = parts[a_idx].strip()
+                query_dict[query] = assignment
 
         # Step 8: Generate per-query .tre files
         id_file_map = {}
