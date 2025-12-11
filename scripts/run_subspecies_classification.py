@@ -32,7 +32,7 @@ CLADE_DELIMITER_VIRUS_TYPES = [
     'TKBENCEPH', 'YELLOWFEVER', 'ZIKA', 'STLOUIS', 'WESTNILE'
 ]
 
-BAD_CHARS_REGEX = r"[\[\'\"(),;|:\]]"
+BAD_CHARS_REGEX = r"[\[\'\"(),;_|:\]]"
 
 REPORT_DATE = "<span>Report Date:</span> %s"
 TABLE_HEADER_C = (
@@ -75,6 +75,7 @@ class SubspeciesClassification:
         self.report_template_path = self.find_lib_path("classification_report.html")
         self.alignment_path = self.find_lib_path("ref-tree-alignment")
         self.rota_genotyper_path = self.find_lib_path("rota-a-genotyper")
+        self.id_map = {}  # clean_id -> original_id
         self.env_vars()
 
     def env_vars(self):
@@ -141,9 +142,13 @@ class SubspeciesClassification:
         with self.input_file.open() as f:
             for line in f:
                 if line.startswith(">"):
-                    line = re.sub(BAD_CHARS_REGEX, "", line.strip())
-                    line = re.sub(" ", "_", line)
-                    line += "\n"
+                    original_id = line[1:].strip()
+                    clean_id = re.sub(BAD_CHARS_REGEX, "", original_id)
+                    clean_id = re.sub(" ", "", clean_id)
+
+                    self.id_map[clean_id] = original_id
+
+                    line = f">{clean_id}\n"
                 cleaned.append(line)
 
         self.input_file.write_text("".join(cleaned))
@@ -377,7 +382,8 @@ class SubspeciesClassification:
         with result_path.open("w") as f:
             f.write("Query Identifier\tClade Classification\n")
             for k, v in query_dict.items():
-                f.write(f"{k}\t{v}\n")
+                display_id = self.id_map.get(k, k)
+                f.write(f"{display_id}\t{v}\n")
 
         # Step 11: Create final report file
         report_path = self.output_file_base.with_name(self.output_file_base.name + "_classification_report.html")
@@ -388,8 +394,9 @@ class SubspeciesClassification:
         html_data[68] = TABLE_HEADER_C
         html_data[70] = ""
         for key, val in query_dict.items():
+            display_id = self.id_map.get(key, key) # original ID for display
             html_data[70] += "<tr>"
-            html_data[70] += TABLE_ROW.replace("%{data}", key)
+            html_data[70] += TABLE_ROW.replace("%{data}", display_id)
             html_data[70] += TABLE_ROW.replace("%{data}", val)
             initial_val = "" if val.startswith("Sequence") else re.sub("-like$", "", val)
             html_data[70] += TABLE_ROW.replace("%{data}", TREE_LINK % (
