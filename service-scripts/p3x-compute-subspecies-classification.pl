@@ -164,8 +164,12 @@ sub run_classifier {
 
     if ($opt->dry_run) {
         return {
-            query => $gto->{id} // "unknown",
-            classification => "DRY_RUN_CLASSIFICATION",
+            results => [
+                {
+                    query => $gto->{id} // "unknown",
+                    classification => "DRY_RUN_CLASSIFICATION",
+                }
+            ],
             command => \@cmd,
         };
     }
@@ -183,14 +187,16 @@ sub run_classifier {
     die "Could not parse classifier JSON output.\nstdout:\n$stdout\nstderr:\n$stderr\n" if $@;
 
     $decoded->{command} = \@cmd;
+    $decoded->{results} //= [];
+
     return $decoded;
 }
 
 sub attach_classification {
     my ($gto, $virus_type, $result, $hostname) = @_;
 
-    my $classification = $result->{classification} // "";
-    return unless $classification ne "";
+    my $results = $result->{results} // [];
+    return unless @$results;
 
     my $event = {
         tool_name      => "p3x-compute-subspecies-classification",
@@ -202,21 +208,26 @@ sub attach_classification {
     my $event_id = $gto->add_analysis_event($event);
 
     $gto->{classifications} //= [];
-    push @{$gto->{classifications}}, {
-        name        => "SubspeciesClassification",
-        version     => "result-only-v1",
-        description => "Viral subtype/clade classification",
-        comment     => "virus_type=$virus_type; query=" .
-            ($result->{query} // "") .
-            "; classification=$classification",
-        event_id    => $event_id,
-    };
+
+    for my $row (@$results) {
+        my $classification = $row->{classification} // "";
+        next unless $classification ne "";
+
+        push @{$gto->{classifications}}, {
+            name        => "SubspeciesClassification",
+            version     => "result-only-v1",
+            description => "Viral subtype/clade classification",
+            comment     => "virus_type=$virus_type; query=" .
+                ($row->{query} // "") .
+                "; classification=$classification",
+            event_id    => $event_id,
+        };
+    }
 
     $gto->{computed_subspecies_classification} = {
-        virus_type     => $virus_type,
-        query          => $result->{query},
-        classification => $classification,
-        event_id       => $event_id,
+        virus_type => $virus_type,
+        results    => $results,
+        event_id   => $event_id,
     };
 }
 
