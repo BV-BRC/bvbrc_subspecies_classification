@@ -171,18 +171,11 @@ class SubspeciesClassification:
 
     def emit_result_only(self, result_rows):
         """
-        Emit exactly one result as JSON on stdout.
+        Emit results as JSON on stdout.
         Expected shape:
             [{"query": "...", "classification": "..."}]
         """
-        if not result_rows:
-            print(json.dumps({"query": None, "classification": ""}))
-            return
-
-        if len(result_rows) != 1:
-            raise ValueError(f"Expected exactly one classification result, got {len(result_rows)}")
-
-        print(json.dumps(result_rows[0]))
+        print(json.dumps({"results": result_rows or []}))
 
     def run_rota_genotyper(self):
         """Run the rotavirus A genotyper and generate HTML report unless in result_only mode."""
