@@ -205,7 +205,7 @@ class SubspeciesClassification:
                                 "classification": classification
                             })
 
-            if self.result_only():
+            if self.result_only:
                 return result_rows
 
             report_path = self.output_file_base.with_name(
@@ -395,7 +395,7 @@ class SubspeciesClassification:
                 "classification": v
             })
 
-        if self.result_only():
+        if self.result_only:
             return result_rows
 
         # Step 8: Generate per-query .tre files
