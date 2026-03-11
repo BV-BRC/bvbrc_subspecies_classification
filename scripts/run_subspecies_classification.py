@@ -64,10 +64,11 @@ TREE_LINK_ALL = (
 
 
 class SubspeciesClassification:
-    def __init__(self, job_file: Path, output_dir: Path):
+    def __init__(self, job_file: Path, output_dir: Path, result_only=False):
         """Initialize classifier with job config and prepare paths."""
         self.job_file = job_file
         self.output_dir = output_dir.resolve()
+        self.result_only = result_only
         self.job_data = self.load_job_file()
         self.virus_type = self.job_data["virus_type"]
         self.input_file = self.output_dir / "input.fasta"
@@ -134,7 +135,7 @@ class SubspeciesClassification:
 
     def clean_fasta_headers(self):
         """Sanitize FASTA headers by removing bad characters and replacing spaces."""
-        if self.input_file.stat().st_size == 0:
+        if not self.input_file.exists() or self.input_file.stat().st_size == 0:
             print("Input fasta file is empty")
             sys.exit(-1)
 
@@ -158,49 +159,93 @@ class SubspeciesClassification:
         self.fetch_or_write_input_fasta()
 
         if self.virus_type == "ROTAA":
-            self.run_rota_genotyper()
+            result = self.run_rota_genotyper()
         else:
-            self.run_tree_based_classification()
+            result = self.run_tree_based_classification()
+
+        if self.result_only:
+            self.emit_result_only(result)
+            return
 
         self.organize_outputs()
 
-    def run_rota_genotyper(self):
-        """Run the rotavirus A genotyper and generate HTML report."""
+    def emit_result_only(self, result_rows):
+        """
+        Emit exactly one result as JSON on stdout.
+        Expected shape:
+            [{"query": "...", "classification": "..."}]
+        """
+        if not result_rows:
+            print(json.dumps({"query": None, "classification": ""}))
+            return
 
+        if len(result_rows) != 1:
+            raise ValueError(f"Expected exactly one classification result, got {len(result_rows)}")
+
+        print(json.dumps(result_rows[0]))
+
+    def run_rota_genotyper(self):
+        """Run the rotavirus A genotyper and generate HTML report unless in result_only mode."""
         try:
             subprocess.check_call(["ss-rotaA-genotyper", str(self.input_file)], cwd=self.output_dir)
-            report_path = self.output_file_base.with_name(self.output_file_base.name + "_classification_report.html")
+
+            result_rows = []
+            result_file = self.output_dir / GENOTYPER_RESULT_F_NAME
+            if result_file.exists():
+                with result_file.open() as f:
+                    lines = f.readlines()[1:]  # Skip header
+                    for line in lines:
+                        parts = line.rstrip("\n").split("\t")
+                        if parts:
+                            query_id = parts[0]
+                            # For rota output, genotype is column 3 in your header layout
+                            classification = parts[2] if len(parts) > 2 else ""
+                            result_rows.append({
+                                "query": query_id,
+                                "classification": classification
+                            })
+
+            if self.result_only():
+                return result_rows
+
+            report_path = self.output_file_base.with_name(
+                self.output_file_base.name + "_classification_report.html"
+            )
             with self.report_template_path.open() as f:
                 html_data = f.readlines()
 
             html_data[60] = REPORT_DATE % datetime.now().strftime("%B %d, %Y %H:%M:%S")
 
-            result_rows = ""
-            with (self.output_dir / GENOTYPER_RESULT_F_NAME).open() as f:
+            result_rows_html = ""
+            with result_file.open() as f:
                 lines = f.readlines()[1:]  # Skip header
                 if lines:
                     html_data[68] = TABLE_HEADER_R_RESULT
                     for line in lines:
-                        result_rows += "<tr>"
+                        result_rows_html += "<tr>"
                         for data in line.strip().split("\t"):
-                            result_rows += TABLE_ROW.replace("%{data}", data)
-                        result_rows += "</tr>"
-            html_data[70] = result_rows
+                            result_rows_html += TABLE_ROW.replace("%{data}", data)
+                        result_rows_html += "</tr>"
+            html_data[70] = result_rows_html
 
-            error_rows = ""
-            with (self.output_dir / GENOTYPER_ERROR_F_NAME).open() as f:
-                lines = f.readlines()[1:]  # Skip header
-                if lines:
-                    html_data[76] = TABLE_HEADER_R_ERR
-                    for line in lines:
-                        result_rows += "<tr>"
-                        for data in line.strip().split("\t"):
-                            error_rows += TABLE_ROW.replace("%{data}", data)
-                        error_rows += "</tr>"
-            html_data[78] = error_rows
+            error_rows_html = ""
+            error_file = self.output_dir / GENOTYPER_ERROR_F_NAME
+            if error_file.exists():
+                with error_file.open() as f:
+                    lines = f.readlines()[1:]  # Skip header
+                    if lines:
+                        html_data[76] = TABLE_HEADER_R_ERR
+                        for line in lines:
+                            error_rows_html += "<tr>"
+                            for data in line.strip().split("\t"):
+                                error_rows_html += TABLE_ROW.replace("%{data}", data)
+                            error_rows_html += "</tr>"
+            html_data[78] = error_rows_html
 
             with report_path.open("w") as f:
                 f.writelines(html_data)
+
+            return result_rows
 
         except Exception as e:
             print(f"Error running rotaA genotyper: {e}")
@@ -228,6 +273,11 @@ class SubspeciesClassification:
                 stats_file = file
             elif file.suffix == ".tsv":
                 mapping_file = file
+
+        if not reference_mfa_file or not reference_tree_file or not stats_file:
+            raise FileNotFoundError(
+                f"Missing one or more required reference files for virus type {self.virus_type}"
+            )
 
         # Step 2: Override reference MSA fasta if job_data has 'ref_msa_fasta'
         if "ref_msa_fasta" in self.job_data:
@@ -302,7 +352,10 @@ class SubspeciesClassification:
             cladinator_cmd.insert(1, f"-S={CLADE_DELIMITER}")
 
         if is_ortho or is_adeno or is_paramyxo or is_pox:
+            if not mapping_file:
+                raise FileNotFoundError(f"Expected mapping TSV for virus type {self.virus_type}")
             cladinator_cmd.insert(1, f"-m={str(mapping_file)}")
+
         if is_adeno or is_paramyxo or self.virus_type == "INFLUENZAH3N2":
             cladinator_cmd.insert(1, "-x")
 
@@ -334,11 +387,22 @@ class SubspeciesClassification:
                 assignment = parts[a_idx].strip()
                 query_dict[query] = assignment
 
+        result_rows = []
+        for k, v in query_dict.items():
+            display_id = self.id_map.get(k, k)
+            result_rows.append({
+                "query": display_id,
+                "classification": v
+            })
+
+        if self.result_only():
+            return result_rows
+
         # Step 8: Generate per-query .tre files
         id_file_map = {}
         with guppy_output.open() as f:
             lines = f.readlines()
-            for i, line in enumerate(lines):
+            for line in lines:
                 for key in query_dict:
                     if f"{key}_" in line:
                         safe_key = re.sub(r"[^a-zA-Z0-9_.-]", "_", key)
@@ -381,18 +445,20 @@ class SubspeciesClassification:
         result_path = self.output_dir / "result.tsv"
         with result_path.open("w") as f:
             f.write("Query Identifier\tClade Classification\n")
-            for k, v in query_dict.items():
-                display_id = self.id_map.get(k, k)
-                f.write(f"{display_id}\t{v}\n")
+            for row in result_rows:
+                f.write(f"{row['query']}\t{row['classification']}\n")
 
         # Step 11: Create final report file
-        report_path = self.output_file_base.with_name(self.output_file_base.name + "_classification_report.html")
+        report_path = self.output_file_base.with_name(
+            self.output_file_base.name + "_classification_report.html"
+        )
         with self.report_template_path.open() as f:
             html_data = f.readlines()
 
         html_data[60] = REPORT_DATE % datetime.now().strftime("%B %d, %Y %H:%M:%S")
         html_data[68] = TABLE_HEADER_C
         html_data[70] = ""
+
         for key, val in query_dict.items():
             display_id = self.id_map.get(key, key) # original ID for display
             html_data[70] += "<tr>"
@@ -400,12 +466,15 @@ class SubspeciesClassification:
             html_data[70] += TABLE_ROW.replace("%{data}", val)
             initial_val = "" if val.startswith("Sequence") else re.sub("-like$", "", val)
             html_data[70] += TABLE_ROW.replace("%{data}", TREE_LINK % (
-                self.BASE_URL, self.job_data["output_path"], self.output_file_base.name, id_file_map[key], initial_val
+                self.BASE_URL, self.job_data.get("output_path", ""), self.output_file_base.name,
+                id_file_map.get(key, ""), initial_val
             ))
             html_data[70] += "</tr>"
 
         with report_path.open("w") as f:
             f.writelines(html_data)
+
+        return result_rows
 
     def organize_outputs(self):
         """Move data files to 'details' folder."""
@@ -425,12 +494,13 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Subspecies Classification Script")
     parser.add_argument("-j", "--jfile", required=True, type=Path, help="JSON job file")
     parser.add_argument("-o", "--output", required=False, type=Path, default=Path("."), help="Output directory")
+    parser.add_argument("-r", "--result-only", action="store_true", help="Return only classification JSON to stdout")
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
-    classifier = SubspeciesClassification(args.jfile, args.output)
+    classifier = SubspeciesClassification(args.jfile, args.output, args.result_only)
     classifier.run()
 
 
