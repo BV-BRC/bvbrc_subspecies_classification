@@ -12,8 +12,7 @@ use Time::HiRes qw(gettimeofday);
 my ($opt, $usage) = describe_options("%c %o [< in] [> out]",
     ["in|i=s", "Input GTO"],
     ["out|o=s", "Output GTO"],
-    ["work_dir=s", "Working directory base", { default => "/tmp/subspecies_classification" }],
-    ["dry_run|n", "Dry run"],
+    ["dry_run|n", "Dry run", { default => 0 }],
     ["help|h", "Print help"],
 );
 
@@ -140,7 +139,7 @@ sub fasta_from_gto {
 sub run_classifier {
     my ($opt, $gto, $virus_type, $fasta_string) = @_;
 
-    my $tmpdir = File::Temp->newdir(DIR => $opt->work_dir, CLEANUP => 1);
+    my $tmpdir = File::Temp->newdir(CLEANUP => 0);
     my $job_file = "$tmpdir/job.json";
 
     my $job = {
