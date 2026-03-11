@@ -115,7 +115,7 @@ class SubspeciesClassification:
         """Retrieve input FASTA from workspace or write it from provided string."""
         if self.job_data["input_source"] == "fasta_file":
             try:
-                subprocess.check_call([
+                self.run_cmd([
                     "p3-cp",
                     f"ws:{self.job_data['input_fasta_file']}",
                     str(self.input_file)
@@ -177,10 +177,31 @@ class SubspeciesClassification:
         """
         print(json.dumps({"results": result_rows or []}))
 
+    def run_cmd(self, cmd, stdout=None):
+        """
+        In result-only mode, keep stdout clean for final JSON.
+        """
+        if self.result_only:
+            subprocess.check_call(
+                cmd,
+                stdout=stdout if stdout is not None else subprocess.DEVNULL,
+                stderr=sys.stderr
+            )
+        else:
+            subprocess.check_call(cmd, stdout=stdout)
+
     def run_rota_genotyper(self):
         """Run the rotavirus A genotyper and generate HTML report unless in result_only mode."""
         try:
-            subprocess.check_call(["ss-rotaA-genotyper", str(self.input_file)], cwd=self.output_dir)
+            if self.result_only:
+                subprocess.check_call(
+                    ["ss-rotaA-genotyper", str(self.input_file)],
+                    cwd=self.output_dir,
+                    stdout=subprocess.DEVNULL,
+                    stderr=sys.stderr
+                )
+            else:
+                subprocess.check_call(["ss-rotaA-genotyper", str(self.input_file)], cwd=self.output_dir)
 
             result_rows = []
             result_file = self.output_dir / GENOTYPER_RESULT_F_NAME
@@ -294,7 +315,10 @@ class SubspeciesClassification:
         ]
         try:
             with mafft_output.open("w") as o:
-                subprocess.check_call(mafft_cmd, stdout=o)
+                if self.result_only:
+                    subprocess.check_call(mafft_cmd, stdout=o, stderr=sys.stderr)
+                else:
+                    subprocess.check_call(mafft_cmd, stdout=o)
         except Exception as e:
             print(f"Error running mafft:\n{e}")
             traceback.print_exc()
@@ -310,7 +334,10 @@ class SubspeciesClassification:
             "-o", str(pplacer_output)
         ]
         try:
-            subprocess.check_call(pplacer_cmd)
+            if self.result_only:
+                subprocess.check_call(pplacer_cmd, stdout=subprocess.DEVNULL, stderr=sys.stderr)
+            else:
+                subprocess.check_call(pplacer_cmd)
         except Exception as e:
             print(f"Error running pplacer:\n{e}")
             traceback.print_exc()
@@ -320,7 +347,10 @@ class SubspeciesClassification:
         guppy_output = self.output_dir / GUPPY_OUTPUT_F_NAME
         guppy_cmd = ["guppy", "sing", str(pplacer_output)]
         try:
-            subprocess.check_call(guppy_cmd)
+            if self.result_only:
+                subprocess.check_call(guppy_cmd, stdout=subprocess.DEVNULL, stderr=sys.stderr)
+            else:
+                subprocess.check_call(guppy_cmd)
         except Exception as e:
             print(f"Error running guppy:\n{e}")
             traceback.print_exc()
@@ -353,7 +383,10 @@ class SubspeciesClassification:
             cladinator_cmd.insert(1, "-x")
 
         try:
-            subprocess.check_call(cladinator_cmd)
+            if self.result_only:
+                subprocess.check_call(cladinator_cmd, stdout=subprocess.DEVNULL, stderr=sys.stderr)
+            else:
+                subprocess.check_call(cladinator_cmd)
         except Exception as e:
             print(f"Error running cladinator:\n{e}")
             traceback.print_exc()
@@ -422,7 +455,10 @@ class SubspeciesClassification:
                 tre_path = self.output_dir / tre_filename
                 try:
                     decorator_cmd[3] = str(tre_path)
-                    subprocess.check_call(decorator_cmd)
+                    if self.result_only:
+                        subprocess.check_call(decorator_cmd, stdout=subprocess.DEVNULL, stderr=sys.stderr)
+                    else:
+                        subprocess.check_call(decorator_cmd)
                     shutil.move(decorator_output, tre_path)
 
                     # Append to global tree file
