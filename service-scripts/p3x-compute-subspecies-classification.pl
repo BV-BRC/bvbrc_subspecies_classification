@@ -10,16 +10,38 @@ use IPC::Run qw(run);
 use Time::HiRes qw(gettimeofday);
 
 my ($opt, $usage) = describe_options("%c %o [< in] [> out]",
-    ["in|i=s", "Input GTO"],
-    ["out|o=s", "Output GTO"],
-    ["dry_run|n", "Dry run", { default => 0 }],
-    ["help|h", "Print help"],
+    [ "in|i=s", "Input GTO" ],
+    [ "out|o=s", "Output GTO" ],
+    [ "dry_run|n", "Dry run", { default => 0 } ],
+    [ "help|h", "Print help" ],
 );
 
 print($usage->text), exit if $opt->help;
 print($usage->text), exit 1 if @ARGV != 0;
 
 chomp(my $hostname = `hostname -f`);
+
+my @VIRUS_TAXON_RULES = (
+    # [ taxon_id, virus_type ]
+    # Matched by walking ncbi_lineage and checking tax_id
+    [ 12637, 'DENGUE' ],  # Dengue virus
+    [ 11234, 'MEASLES' ], # Measles morbillivirus
+    [ 10244, 'MPOX' ],    # Monkeypox virus
+);
+
+# Influenza A handled separately
+# Influenza A species tax_id (Alphainfluenzavirus influenzae)
+# https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=2955291
+my $INFLUENZA_A_TAXID = 2955291;
+my @INFLUENZA_SUBTYPE_RULES = (
+    [ qr/^H5/i, sub {'INFLUENZAH5'} ],
+    [ qr/^H3N2/i, sub {'INFLUENZAH3N2'} ],
+    [ qr/^H3/i, sub {'SWINEH3'} ],
+    [ qr/^H1/i, sub {
+        my $c = shift;
+        $c eq 'usa' ? 'SWINEH1US' : 'SWINEH1'
+    } ],
+);
 
 sub get_gto {
     my ($opt) = @_;
@@ -45,7 +67,16 @@ sub parse_comment_metadata {
     my %meta;
 
     for my $contig (@{$gto->{contigs} // []}) {
-        my $comments = $contig->{genbank_locus}->{comment} // [];
+
+        my $locus = $contig->{genbank_locus} // {};
+
+        # capture GenBank metadata
+        $meta{organism} //= $locus->{organism};
+        $meta{source} //= $locus->{source};
+        $meta{definition} //= $locus->{definition};
+
+        # existing comment parsing
+        my $comments = $locus->{comment} // [];
         for my $line (@$comments) {
             if ($line =~ /^\s*([^:]+?)\s*::\s*(.*?)\s*$/) {
                 my ($k, $v) = ($1, $2);
@@ -54,6 +85,7 @@ sub parse_comment_metadata {
             }
         }
     }
+
     return \%meta;
 }
 
@@ -87,37 +119,170 @@ sub has_ha_segment {
     return 0;
 }
 
+sub virus_text_for_detection {
+    my ($gto, $meta) = @_;
+
+    my @texts;
+
+    push @texts, $gto->{scientific_name}
+        if defined $gto->{scientific_name};
+
+    push @texts, $meta->{organism} if defined $meta->{organism};
+    push @texts, $meta->{source} if defined $meta->{source};
+    push @texts, $meta->{definition} if defined $meta->{definition};
+
+    # remove duplicates
+    my %seen;
+    @texts = grep {defined($_) && !$seen{$_}++} @texts;
+
+    return @texts;
+}
+
 sub determine_virus_type {
     my ($gto) = @_;
 
+    my $genome_id = $gto->{id} // 'unknown';
     my $meta = parse_comment_metadata($gto);
-    my $name = $gto->{scientific_name} // '';
-    my $subtype = subtype_from_gto($gto, $meta);
     my $country = lc(country_from_gto($meta) // '');
+    my $lineage = $gto->{ncbi_lineage} // [];
 
-    if (lineage_has_name($gto, "Influenza A virus") || $name =~ /influenza a virus/i) {
-        return undef unless has_ha_segment($gto, $meta);
+    my $is_influenza_a = 0;
+    my $subtype_name = '';
 
-        if (defined($subtype) && $subtype =~ /^H1/i) {
-            return $country eq 'usa' ? 'SWINEH1US' : 'SWINEH1';
+    for my $entry (@$lineage) {
+        my ($name, $tax_id, $rank) = @$entry;
+
+        # Detect Influenza A by genus tax_id
+        if (defined $tax_id && $tax_id == $INFLUENZA_A_TAXID) {
+            $is_influenza_a = 1;
+            print STDERR "[$genome_id] Detected Influenza A via lineage\n";
         }
-        elsif (defined($subtype) && $subtype =~ /^H3/i) {
-            return 'SWINEH3';
-        }
-        elsif (defined($subtype) && $subtype =~ /^H5/i) {
-            return 'INFLUENZAH5';
+
+        # Capture subtype name from serotype rank, e.g. "H1N1 subtype"
+        if (defined $rank && $rank eq 'serotype' && defined $name) {
+            $subtype_name = $name;
+            print STDERR "[$genome_id] Found serotype in lineage: '$subtype_name'\n";
         }
     }
 
-    if ($name =~ /dengue/i || lineage_has_name($gto, "Dengue")) {
-        return 'DENGUE';
+    if ($is_influenza_a) {
+        if (!has_ha_segment($gto, $meta)) {
+            print STDERR "[$genome_id] Influenza A detected but no HA segment found; skipping classification\n";
+            return undef;
+        }
+        print STDERR "[$genome_id] HA segment confirmed\n";
+
+        if (!$subtype_name) {
+            print STDERR "[$genome_id] Influenza A detected but no serotype rank found in lineage; skipping classification\n";
+            return undef;
+        }
+
+        # Extract the H-type from serotype name, fall back to comment metadata
+        my ($subtype) = ($subtype_name =~ /^(H\d+N?\d*)/i);
+        if (!defined $subtype) {
+            print STDERR "[$genome_id] Could not parse subtype from serotype '$subtype_name'; skipping classification\n";
+            return undef;
+        }
+        print STDERR "[$genome_id] Parsed subtype: '$subtype' (country: '$country')\n";
+
+        for my $rule (@INFLUENZA_SUBTYPE_RULES) {
+            my ($regex, $cb) = @$rule;
+            if ($subtype =~ $regex) {
+                my $virus_type = $cb->($country);
+                print STDERR "[$genome_id] Matched influenza subtype rule for '$subtype' -> virus_type='$virus_type'\n";
+                return $virus_type;
+            }
+        }
+
+        print STDERR "[$genome_id] Influenza A subtype '$subtype' did not match any known subtype rule; skipping classification\n";
+        return undef; # Influenza A but unrecognized subtype
     }
 
-    if ($name =~ /(monkeypox|mpox)/i || lineage_has_name($gto, "Monkeypox")) {
-        return 'MPOX';
+    # Non-influenza: match by tax_id against taxon rules
+    my %taxon_lookup = map {$_->[0] => $_->[1]} @VIRUS_TAXON_RULES;
+    for my $entry (@$lineage) {
+        my ($name, $tax_id) = @$entry;
+        if (defined $tax_id && exists $taxon_lookup{$tax_id}) {
+            my $virus_type = $taxon_lookup{$tax_id};
+            print STDERR "[$genome_id] Matched non-influenza taxon rule: '$name' (tax_id=$tax_id) -> virus_type='$virus_type'\n";
+            return $virus_type;
+        }
     }
 
+    print STDERR "[$genome_id] No matching virus type found in lineage; skipping classification\n";
     return undef;
+}
+
+sub virus_key_from_type {
+    my ($virus_type) = @_;
+    my %map = (
+        SWINEH1       => "h1",
+        SWINEH1US     => "h1us",
+        SWINEH3       => "h3",
+        INFLUENZAH3N2 => "h3",
+        INFLUENZAH5   => "h5",
+        DENGUE        => "dengue",
+        MPOX          => "monkeypox",
+        MEASLES       => "measles",
+    );
+    return $map{$virus_type};
+}
+
+sub clade_field_for_type {
+    my ($virus_type) = @_;
+    my %clades = (
+        "dengue"    => "subtype",
+        "h1"        => "h1_clade_global",
+        "h1us"      => "h1_clade_us",
+        "h3"        => "h3_clade",
+        "h5"        => "h5_clade",
+        "monkeypox" => "clade",
+        "measles"   => "subclade",
+    );
+    my $key = virus_key_from_type($virus_type);
+    return $clades{$key};
+}
+
+sub contig_is_ha {
+    my ($contig) = @_;
+    my $rep = $contig->{replicon_type} // '';
+    my $def = $contig->{genbank_locus}->{definition} // '';
+    return 1 if $rep =~ /\bHA\b/i;
+    return 1 if $def =~ /\bsegment\s+4\b/i;
+    return 1 if $def =~ /\bhemagglutinin\b/i;
+    return 0;
+}
+
+sub primary_result_for_genome {
+    my ($gto, $virus_type, $results) = @_;
+
+    my @nonempty = grep {
+        defined($_->{classification}) && $_->{classification} ne ''
+    } @$results;
+
+    return undef unless @nonempty;
+
+    # Influenza: use HA-segment result
+    if ($virus_type =~ /^(SWINEH1|SWINEH1US|SWINEH3|INFLUENZAH5)$/) {
+        my %ha_contigs = map {
+            my $c = $_;
+            contig_is_ha($c) ? (($c->{id} // '') => 1) : ()
+        } @{$gto->{contigs} // []};
+
+        for my $row (@nonempty) {
+            my $query = $row->{query} // '';
+            my (undef, $contig_id) = split(/\|/, $query, 2);
+            return $row if $contig_id && $ha_contigs{$contig_id};
+        }
+    }
+
+    # Non-influenza or fallback: if all equal, use that value
+    my %uniq = map {(($_->{classification} // '') => 1)} @nonempty;
+    my @vals = grep {$_ ne ''} keys %uniq;
+    return $nonempty[0] if @vals == 1;
+
+    # Final fallback: first non-empty result
+    return $nonempty[0];
 }
 
 sub fasta_from_gto {
@@ -166,7 +331,7 @@ sub run_classifier {
         return {
             results => [
                 {
-                    query => $gto->{id} // "unknown",
+                    query          => $gto->{id} // "unknown",
                     classification => "DRY_RUN_CLASSIFICATION",
                 }
             ],
@@ -198,37 +363,36 @@ sub attach_classification {
     my $results = $result->{results} // [];
     return unless @$results;
 
+    my $primary = primary_result_for_genome($gto, $virus_type, $results);
+    return unless $primary;
+
+    my $classification = $primary->{classification} // "";
+
+    # Ignore empty or unassigned results
+    if (!$classification || $classification =~ /^unassigned$/i) {
+        print STDERR "Classification result is empty or unassigned; skipping update.\n";
+        return;
+    }
+
+    my $clade_field = clade_field_for_type($virus_type)
+        or die "No clade field for virus type $virus_type\n";
+
     my $event = {
         tool_name      => "p3x-compute-subspecies-classification",
-        parameters     => [@{$result->{command} // []}],
+        parameters     => [ @{$result->{command} // []} ],
         execution_time => scalar gettimeofday,
         hostname       => $hostname,
     };
 
+    print STDERR "Genome: ", ($gto->{id} // "unknown"), "\n";
+    print STDERR "Virus type: $virus_type\n";
+    print STDERR "Classification: $classification\n";
+    print STDERR "Writing to GTO field: $clade_field\n";
+
     my $event_id = $gto->add_analysis_event($event);
 
-    $gto->{classifications} //= [];
-
-    for my $row (@$results) {
-        my $classification = $row->{classification} // "";
-        next unless $classification ne "";
-
-        push @{$gto->{classifications}}, {
-            name        => "SubspeciesClassification",
-            version     => "result-only-v1",
-            description => "Viral subtype/clade classification",
-            comment     => "virus_type=$virus_type; query=" .
-                ($row->{query} // "") .
-                "; classification=$classification",
-            event_id    => $event_id,
-        };
-    }
-
-    $gto->{computed_subspecies_classification} = {
-        virus_type => $virus_type,
-        results    => $results,
-        event_id   => $event_id,
-    };
+    # Write genome-level field
+    $gto->{$clade_field} = $classification;
 }
 
 my $gto = get_gto($opt);
@@ -245,6 +409,7 @@ else {
 
 if ($opt->out) {
     $gto->destroy_to_file($opt->out);
-} else {
+}
+else {
     $gto->destroy_to_file(\*STDOUT);
 }
