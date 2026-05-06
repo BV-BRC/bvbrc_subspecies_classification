@@ -242,7 +242,7 @@ sub attach_genotype {
 
     my $event_id = $gto->add_analysis_event($event);
 
-    $gto->{subclade} = $genotype;
+    $gto->{genotype_annotation}->{subclade} = $genotype;
 }
 
 if (!is_h5n1($gto)) {

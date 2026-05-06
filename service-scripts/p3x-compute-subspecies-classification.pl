@@ -392,7 +392,13 @@ sub attach_classification {
     my $event_id = $gto->add_analysis_event($event);
 
     # Write genome-level field
-    $gto->{$clade_field} = $classification;
+    # The hX_clade fields are lists.
+    #
+    if ($clade_field =~ /^h\d/)
+    {
+	$classification = [$classification];
+    }
+    $gto->{genotype_annotation}->{$clade_field} = $classification;
 }
 
 my $gto = get_gto($opt);
