@@ -16,7 +16,6 @@ e	MN061243|B/Moscow/2/2019_victoria
 f	CY218276|B/California/82/2016_victoria
 10	MH080820|B/California/63/2017_victoria
 11	CY182593|B/Nicaragua/AGB2-34/2012_victoria
-12	CY182617|B/Nicaragua/AGB2-38/2012_victoria
 13	CY182625|B/Nicaragua/AGB2-39/2012_victoria
 14	CY182657|B/Nicaragua/AGB2-48/2012_victoria
 15	CY150275|B/Brisbane/10/2011_victoria
@@ -55,12 +54,7 @@ f	CY218276|B/California/82/2016_victoria
 36	CY018757|B/Victoria/02/1987_victoria
 37	OL334986|B/Egypt/2221/2018_yamagata
 38	OL354598|B/Egypt/2209/2018_yamagata
-39	OL354472|B/Egypt/2307/2018_yamagata
-3a	OL354582|B/Egypt/1862/2018_yamagata
-3b	OL354717|B/Egypt/2559/2019_yamagata
-3c	OL354804|B/Egypt/2305/2018_yamagata
 3d	MH130602|B/Washington/04/2018_yamagata
-3e	MH585134|B/Arizona/07/2018_yamagata
 3f	MN061259|B/Moscow/5/2019_yamagata
 40	MH136237|B/Michigan/07/2018_yamagata
 41	MN061235|B/Grozny/6/2019_yamagata
@@ -73,8 +67,6 @@ f	CY218276|B/California/82/2016_victoria
 48	CY197777|B/Singapore/22/2012_yamagata
 49	CY197785|B/Singapore/24/2012_yamagata
 4a	MZ603929|B/USA/9/2017_yamagata
-4b	MZ604004|B/USA/1/2017_yamagata
-4c	MZ604062|B/USA/4/2017_yamagata
 4d	CY197905|B/Brisbane/3/2013_yamagata
 4e	CY198537|B/Singapore/Tt218/2013_yamagata
 4f	CY198513|B/Singapore/Kk139/2013_yamagata
@@ -140,7 +132,6 @@ f	CY218276|B/California/82/2016_victoria
 8b	CY174041|B/New York/1015/1996_yamagata
 8c	CY018533|B/Russia/22/1995_yamagata
 8d	CY019675|B/Bangkok/141/1994_yamagata
-8e	CY019683|B/Bangkok/143/1994_yamagata
 8f	CY019667|B/New York/24/1993_yamagata
 90	CY019699|B/Johannesburg/06/1994_yamagata
 91	CY018805|B/Connecticut/07/1993_yamagata
