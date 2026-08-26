@@ -19,8 +19,10 @@ my ($opt, $usage) = describe_options("%c %o",
 
 print($usage->text), exit if $opt->help;
 
-my $gto = GenomeTypeObject->new({ file => $opt->in })
-    or die "Could not read GTO\n";
+my $gto = $opt->in ? GenomeTypeObject->new({ file => $opt->in })
+	: GenomeTypeObject->new({ file => \*STDIN });
+
+$gto or die "Could not read GTO\n";
 
 # Influenza A species tax_id (Alphainfluenzavirus influenzae)
 # https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=2955291
@@ -242,7 +244,7 @@ sub attach_genotype {
 
     my $event_id = $gto->add_analysis_event($event);
 
-    $gto->{subclade} = $genotype;
+    $gto->{genotype_annotation}->{subclade} = $genotype;
 }
 
 if (!is_h5n1($gto)) {
