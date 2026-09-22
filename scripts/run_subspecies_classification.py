@@ -23,6 +23,7 @@ GENOTYPER_RESULT_F_NAME = "input.fasta.result"
 GENOTYPER_ERROR_F_NAME = "input.fasta.err"
 
 CLADE_DELIMITER = "([A-Za-z0-9._]+)\|.+"
+CLADE_DELIMITER_INFLUENZAB = r".+_(Victoria|Yamagata)$"
 CLADE_DELIMITER_INFLUENZAH5 = ".+_\{(.+)\}"
 CLADE_DELIMITER_MPOX = "([A-Za-z0-9.]+)\|.+"
 CLADE_DELIMITER_DENGUE = "(\d+).+"
@@ -364,8 +365,11 @@ class SubspeciesClassification:
         is_adeno = self.virus_type in ["MASTADENOA", "MASTADENOB", "MASTADENOC", "MASTADENOE", "MASTADENOF"]
         is_paramyxo = self.virus_type in ["MEASLES", "MUMPS"]
         is_pox = (self.virus_type == "MPOX")
+        is_influenza_b = self.virus_type in ["INFLUENZABG", "INFLUENZABP"]
 
-        if self.virus_type == "INFLUENZAH5":
+        if is_influenza_b:
+            cladinator_cmd.insert(1, f"-S={CLADE_DELIMITER_INFLUENZAB}")
+        elif self.virus_type == "INFLUENZAH5":
             cladinator_cmd.insert(1, f"-S={CLADE_DELIMITER_INFLUENZAH5}")
         elif self.virus_type == "MPOX":
             cladinator_cmd.insert(1, f"-S={CLADE_DELIMITER_MPOX}")
@@ -374,7 +378,7 @@ class SubspeciesClassification:
         elif self.virus_type in CLADE_DELIMITER_VIRUS_TYPES:
             cladinator_cmd.insert(1, f"-S={CLADE_DELIMITER}")
 
-        if is_ortho or is_adeno or is_paramyxo or is_pox:
+        if is_ortho or is_adeno or is_paramyxo or is_pox or is_influenza_b:
             if not mapping_file:
                 raise FileNotFoundError(f"Expected mapping TSV for virus type {self.virus_type}")
             cladinator_cmd.insert(1, f"-m={str(mapping_file)}")
@@ -443,7 +447,7 @@ class SubspeciesClassification:
                         break
 
         # Step 9: Decorate ,tre files to display labels in phylogenetic tree
-        if is_ortho or is_adeno or is_paramyxo or is_pox:
+        if is_ortho or is_adeno or is_paramyxo or is_pox or is_influenza_b:
             decorator_output = self.output_dir / "outtree.tre"
             decorator_cmd = [
                 "decorator", "-f=n", "-nh",
