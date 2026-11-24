@@ -34,10 +34,10 @@ my @VIRUS_TAXON_RULES = (
 # https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=2955291
 my $INFLUENZA_A_TAXID = 2955291;
 my @INFLUENZA_SUBTYPE_RULES = (
-    [ qr/^H5/i, sub {'INFLUENZAH5'} ],
-    [ qr/^H3N2/i, sub {'INFLUENZAH3N2'} ],
-    [ qr/^H3/i, sub {'SWINEH3'} ],
-    [ qr/^H1/i, sub {
+    [ qr/^H5(?:N\d+)?$/i, sub {'INFLUENZAH5'} ],
+    [ qr/^H3N2$/i, sub {'INFLUENZAH3N2'} ],
+    [ qr/^H3(?:N\d+)?$/i, sub {'SWINEH3'} ],
+    [ qr/^H1(?:N\d+)?$/i, sub {
         my $c = shift;
         $c eq 'usa' ? 'SWINEH1US' : 'SWINEH1'
     } ],
@@ -91,11 +91,45 @@ sub parse_comment_metadata {
 
 sub subtype_from_gto {
     my ($gto, $meta) = @_;
-    return $meta->{subtype} if $meta->{subtype};
+    my $genome_id = $gto->{id} // 'unknown';
+    my @sources = (
+        ['genome name', $gto->{scientific_name}],
+        ['comment subtype', $meta->{subtype}],
+    );
 
-    my $name = $gto->{scientific_name} // '';
-    return uc($1) if $name =~ /\((H\d+N\d+)\)/i;
-    return undef;
+    for my $contig (@{$gto->{contigs} // []}) {
+        my $locus = $contig->{genbank_locus} // {};
+        my $cid = $contig->{id} // 'unknown';
+        push @sources, map { ["contig $cid $_", $locus->{$_}] }
+            qw(organism source definition);
+        for my $line (@{$locus->{comment} // []}) {
+            if ($line =~ /^\s*subtype\s*::\s*(.*?)\s*$/i) {
+                push @sources, ["contig $cid comment subtype", $1];
+            }
+        }
+    }
+
+    my ($subtype, $ha, $na, $chosen_source);
+    for my $source (@sources) {
+        my ($label, $text) = @$source;
+        next unless defined $text;
+        while ($text =~ /\b(H\d+)(?:N(\d+))?\b/ig) {
+            my ($h, $n) = (uc($1), $2);
+            my $candidate = $h . (defined($n) ? "N$n" : '');
+            if (defined($ha) && ($ha ne $h ||
+                    (defined($na) && defined($n) && $na ne $n))) {
+                print STDERR "[$genome_id] Conflicting subtype metadata: '$subtype' from $chosen_source and '$candidate' from $label; skipping classification\n";
+                return undef;
+            }
+            # H1 and H1N1 agree; prefer the more complete designation.
+            if (!defined($subtype) || (!defined($na) && defined($n))) {
+                ($subtype, $ha, $na, $chosen_source) = ($candidate, $h, $n, $label);
+            }
+        }
+    }
+    print STDERR "[$genome_id] Subtype '$subtype' found in $chosen_source\n"
+        if defined $subtype;
+    return $subtype;
 }
 
 sub country_from_gto {
@@ -172,17 +206,17 @@ sub determine_virus_type {
         }
         print STDERR "[$genome_id] HA segment confirmed\n";
 
-        if (!$subtype_name) {
-            print STDERR "[$genome_id] Influenza A detected but no serotype rank found in lineage; skipping classification\n";
-            return undef;
-        }
-
-        # Extract the H-type from serotype name, fall back to comment metadata
-        my ($subtype) = ($subtype_name =~ /^(H\d+N?\d*)/i);
+        # Prefer the lineage serotype, then try names and GenBank metadata.
+        my ($subtype) = ($subtype_name =~ /^(H\d+(?:N\d+)?)\b/i);
         if (!defined $subtype) {
-            print STDERR "[$genome_id] Could not parse subtype from serotype '$subtype_name'; skipping classification\n";
+            print STDERR "[$genome_id] No parseable lineage serotype; checking subtype metadata\n";
+            $subtype = subtype_from_gto($gto, $meta);
+        }
+        if (!defined $subtype) {
+            print STDERR "[$genome_id] No unambiguous subtype available; skipping classification\n";
             return undef;
         }
+        $subtype = uc($subtype);
         print STDERR "[$genome_id] Parsed subtype: '$subtype' (country: '$country')\n";
 
         for my $rule (@INFLUENZA_SUBTYPE_RULES) {
